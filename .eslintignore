@@ -1,0 +1,9 @@
+*.jpg
+*.png
+*.svg
+*.gif
+*.html
+*.ttf
+*.eot
+*.woff
+src/assets/fonts/*
