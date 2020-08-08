@@ -1,5 +1,6 @@
-import React, { FC, useEffect, useState, useMemo } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { StoreI, DictionaryI } from '../../store/types';
 import { headerSettings, getFieldSettings, sortSettings } from './tableSettings';
 import TableDictionary from '../../Components/TableDictionary';
@@ -8,6 +9,17 @@ import { booksMock } from '../../utils/dictionaries/mock';
 import { SETBOOKS } from '../../store/constants';
 import { useNotifications } from '../../Components/NotificationPopup/ProviderNotification';
 
+const StyledCustomTableWrapper = styled.div`
+  height: 450px;
+  position: relative;
+  > * {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+  }
+`;
 const BooksPage: FC<{ dictionaries: DictionaryI | null }> = ({ dictionaries, books }) => {
   const [filterBooks, setFilterBooks] = useState<BookI[]>(books);
   const { handleAxiosError } = useNotifications();
@@ -21,16 +33,16 @@ const BooksPage: FC<{ dictionaries: DictionaryI | null }> = ({ dictionaries, boo
   useEffect(() => {
     getBooksFromServer();
   }, []);
-  return useMemo(() => {
-    return (
+  return (
+    <StyledCustomTableWrapper>
       <TableDictionary
         sortList={sortSettings}
         headList={headerSettings}
         bodyList={filterBooks}
         fieldSettings={getFieldSettings(dictionaries)}
       />
-    );
-  }, [dictionaries, filterBooks]);
+    </StyledCustomTableWrapper>
+  );
 };
 const mapStateToProps = (state: StoreI) => {
   return {

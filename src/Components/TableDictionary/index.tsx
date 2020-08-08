@@ -16,6 +16,7 @@ import { handleSort, showSortable, stableSort } from '../../additional/Sorter';
 import { TableDictionaryProps, AnyObjectWithId } from './interfaces';
 import TableCellField from './TableCellField';
 import { SortEl } from '../../additional/Sorter/interfaces';
+import { ScrollBar } from '../BasicElements';
 
 interface StyledTableRowProps extends TableRowProps {
   isDisabled?: boolean;
@@ -29,8 +30,12 @@ const StyledTableRow = styled(({ isDisabled, ...props }) => <TableRow {...props}
 const StyledTableCell = styled(TableCell)`
   width: 175px;
 `;
-const StyledTableBody = styled(TableBody)`
-  height: 375px;
+
+const TableWrapper = styled.div`
+  height: 100%;
+`;
+const StTable = styled(Table)`
+  position: relative;
 `;
 const getList = <T extends unknown>(bodyList: T[]): T[] => {
   const clonedBodyList: T[] = [...bodyList];
@@ -103,108 +108,112 @@ const TableDictionary = <T extends AnyObjectWithId>({
 
   return (
     <Paper className={className}>
-      <Table stickyHeader>
-        <TableHead>
-          <StyledTableRow isDisabled={edited !== null}>
-            {headList.map((column) => (
-              <TableCell align={column.align} key={column.id as string}>
-                {showSortable({ column, sortables, onSortHandler })}
-              </TableCell>
-            ))}
-          </StyledTableRow>
-        </TableHead>
-        {/* <ScrollBar> */}
-        <StyledTableBody>
-          {currentList.length === 0 ? (
-            <TableCell colSpan={6} align="center">
-              <>There is no data</>
-            </TableCell>
-          ) : (
-            stableSort(currentList, sortables).map((column) => {
-              let item: T = column;
-              // const labelId = `enhanced-table-checkbox-${item.id}`;
-              const isEditField = isEdited(edited, column);
+      <TableWrapper>
+        <ScrollBar>
+          <StTable stickyHeader aria-label="sticky table">
+            <TableHead>
+              <StyledTableRow isDisabled={edited !== null}>
+                {headList.map((column) => (
+                  <TableCell align={column.align} key={column.id as string}>
+                    {showSortable({ column, sortables, onSortHandler })}
+                  </TableCell>
+                ))}
+              </StyledTableRow>
+            </TableHead>
+            <TableBody>
+              {currentList.length === 0 ? (
+                <TableCell colSpan={6} align="center">
+                  <>There is no data</>
+                </TableCell>
+              ) : (
+                stableSort(currentList, sortables).map((column) => {
+                  let item: T = column;
+                  // const labelId = `enhanced-table-checkbox-${item.id}`;
+                  const isEditField = isEdited(edited, column);
 
-              if (edited && column.id === edited.id) {
-                item = edited;
-              }
+                  if (edited && column.id === edited.id) {
+                    item = edited;
+                  }
 
-              return (
-                <StyledTableRow
-                  key={item.id}
-                  hover
-                  // role="checkbox"
-                  tabIndex={-1}
-                  // onClick={
-                  //   edited && column.id === edited.id ? undefined : onHandleSelect(item.id)
-                  // }
-                  isDisabled={edited !== null && edited.id !== item.id}
-                >
-                  {isEditField ? (
-                    <>
-                      <TableCell>
-                        <TextField
-                          value={item.name}
-                          onChange={(e) => handleChange(e.target.value, 'name')}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          value={item.city}
-                          onChange={(e) => handleChange(e.target.value, 'city')}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          value={item.address}
-                          onChange={(e) => handleChange(e.target.value, 'address')}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          value={item.phone}
-                          onChange={(e) => handleChange(e.target.value, 'phone')}
-                        />
-                      </TableCell>
-                    </>
-                  ) : (
-                    <>
-                      {fieldSettings.map((fieldSetting) => {
-                        return <TableCellField {...fieldSetting} value={item[fieldSetting.name]} />;
-                      })}
-                      {/* <TableCell>{item.name}</TableCell>
+                  return (
+                    <StyledTableRow
+                      key={item.id}
+                      hover
+                      // role="checkbox"
+                      tabIndex={-1}
+                      // onClick={
+                      //   edited && column.id === edited.id ? undefined : onHandleSelect(item.id)
+                      // }
+                      isDisabled={edited !== null && edited.id !== item.id}
+                    >
+                      {isEditField ? (
+                        <>
+                          <TableCell>
+                            <TextField
+                              value={item.name}
+                              onChange={(e) => handleChange(e.target.value, 'name')}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              value={item.city}
+                              onChange={(e) => handleChange(e.target.value, 'city')}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              value={item.address}
+                              onChange={(e) => handleChange(e.target.value, 'address')}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <TextField
+                              value={item.phone}
+                              onChange={(e) => handleChange(e.target.value, 'phone')}
+                            />
+                          </TableCell>
+                        </>
+                      ) : (
+                        <>
+                          {fieldSettings.map((fieldSetting) => {
+                            return (
+                              <TableCellField {...fieldSetting} value={item[fieldSetting.name]} />
+                            );
+                          })}
+                          {/* <TableCell>{item.name}</TableCell>
                         <TableCell>{item.city}</TableCell>
                         <TableCell>{item.address}</TableCell>
                         <TableCell>{item.phone}</TableCell> */}
-                    </>
-                  )}
+                        </>
+                      )}
 
-                  {isEditField ? (
-                    <StyledTableCell>
-                      <IconButton onClick={saveData}>
-                        <SaveRounded color="primary" />
-                      </IconButton>
-                      <IconButton onClick={cancellationData}>
-                        <CancelRounded color="error" />
-                      </IconButton>
-                    </StyledTableCell>
-                  ) : (
-                    <StyledTableCell>
-                      <IconButton onClick={onHandleRemove(item)}>
-                        <DeleteRounded color="error" />
-                      </IconButton>
-                      <IconButton onClick={startEdit(item)}>
-                        <EditRounded color="primary" />
-                      </IconButton>
-                    </StyledTableCell>
-                  )}
-                </StyledTableRow>
-              );
-            })
-          )}
-        </StyledTableBody>
-        {/* </ScrollBar> */}
-      </Table>
+                      {isEditField ? (
+                        <StyledTableCell>
+                          <IconButton onClick={saveData}>
+                            <SaveRounded color="primary" />
+                          </IconButton>
+                          <IconButton onClick={cancellationData}>
+                            <CancelRounded color="error" />
+                          </IconButton>
+                        </StyledTableCell>
+                      ) : (
+                        <StyledTableCell>
+                          <IconButton onClick={onHandleRemove(item)}>
+                            <DeleteRounded color="error" />
+                          </IconButton>
+                          <IconButton onClick={startEdit(item)}>
+                            <EditRounded color="primary" />
+                          </IconButton>
+                        </StyledTableCell>
+                      )}
+                    </StyledTableRow>
+                  );
+                })
+              )}
+            </TableBody>
+          </StTable>
+        </ScrollBar>
+      </TableWrapper>
     </Paper>
   );
 };
