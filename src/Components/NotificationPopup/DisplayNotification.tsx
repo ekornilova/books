@@ -2,9 +2,15 @@ import React, { useContext, FC, useEffect } from 'react';
 import { Close, CheckCircleOutline } from '@material-ui/icons';
 import styled from 'styled-components';
 import { DialogContentText, DialogContent, Dialog, DialogTitle } from '@material-ui/core';
-import { NotificationContext, NotificationI, NotificationContentI } from './ProviderNotification';
+import {
+  NotificationContext,
+  NotificationI,
+  NotificationContentI,
+  DialogueContentI,
+} from './ProviderNotification';
 import { TextComponent, Button } from '../BasicElements';
 import { StyledDialogActions } from '../StyledMuiComponents/StyledDialogActions';
+import ModalConfirmDialogue from '../ModalConfirmDialogue';
 
 export const BoxWrapper = styled.div`
   right: 0px;
@@ -109,7 +115,25 @@ const SuccessNotificationView: FC<{
     </ContainerNotification>
   );
 };
+const ConfirmNotificationView: FC<{
+  notificationData: NotificationI;
+  handleClose: (itemId: string) => void;
+}> = ({ notificationData, handleClose }) => {
+  const onCloseHandler = () => {
+    handleClose(notificationData.id);
+  };
 
+  const notificationContent = notificationData.content as DialogueContentI;
+
+  return (
+    <ModalConfirmDialogue
+      open
+      {...notificationContent}
+      closeHandler={onCloseHandler}
+      onReject={onCloseHandler}
+    />
+  );
+};
 const ErrorNotificationView: FC<{
   notificationData: NotificationI;
   handleClose: (errorId: string) => void;
@@ -148,6 +172,8 @@ const getNotificationComponent = (componentName: string) => {
   switch (componentName) {
     case 'error':
       return ErrorNotificationView;
+    case 'dialogue':
+      return ConfirmNotificationView;
     default:
       return SuccessNotificationView;
   }

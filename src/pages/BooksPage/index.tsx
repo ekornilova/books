@@ -40,6 +40,7 @@ const BooksPage: FC<{ dictionaries: DictionaryI | null }> = ({ dictionaries, boo
         headList={headerSettings}
         bodyList={filterBooks}
         fieldSettings={getFieldSettings(dictionaries)}
+        deleteConfirmText="Do you really want to remove this book?"
       />
     </StyledCustomTableWrapper>
   );

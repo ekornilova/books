@@ -17,6 +17,7 @@ import { TableDictionaryProps, AnyObjectWithId } from './interfaces';
 import TableCellField from './TableCellField';
 import { SortEl } from '../../additional/Sorter/interfaces';
 import { ScrollBar } from '../BasicElements';
+import { useNotifications } from '../NotificationPopup/ProviderNotification';
 
 interface StyledTableRowProps extends TableRowProps {
   isDisabled?: boolean;
@@ -54,8 +55,9 @@ const TableDictionary = <T extends AnyObjectWithId>({
   sortList,
   fieldSettings,
   className,
+  deleteConfirmText,
 }: TableDictionaryProps<T>) => {
-  // Создаем сортировки
+  const { showDialogue } = useNotifications();
   const [sortables, setSortables] = React.useState<SortEl<T>[]>(sortList);
   const [edited, setEdited] = React.useState<T | null>(null);
   const currentList: T[] = getList(bodyList);
@@ -68,9 +70,14 @@ const TableDictionary = <T extends AnyObjectWithId>({
 
   const onHandleRemove = (item: T): (() => void) => {
     return () => {
-      if (onDeleteRow) {
-        onDeleteRow(item);
-      }
+      showDialogue({
+        onAccept: () => {
+          if (onDeleteRow) {
+            onDeleteRow(item);
+          }
+        },
+        modalText: deleteConfirmText || '',
+      });
     };
   };
   const handleChange = (value: string, orderBy: keyof T): void => {

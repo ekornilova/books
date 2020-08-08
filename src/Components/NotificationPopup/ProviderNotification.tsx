@@ -12,6 +12,10 @@ export interface BaseDialogueI {
   rejectButtonLabel?: string;
 }
 
+export interface DialogueContentI extends BaseDialogueI {
+  onAccept(): void;
+}
+
 export interface NotificationContentI {
   message: string;
   title?: string;
@@ -28,6 +32,7 @@ export interface NotificationContextI {
   dispatch: React.Dispatch<{ type: string; data: any }>;
   handleAxiosError(error: any): any;
   handleAxiosSuccess(message: string, title?: string): any;
+  showDialogue(dialogueContent: DialogueContentI): any;
 }
 
 export const NotificationContext = createContext<NotificationContextI>({
@@ -35,6 +40,7 @@ export const NotificationContext = createContext<NotificationContextI>({
   dispatch: (): any => {},
   handleAxiosError: (): any => {},
   handleAxiosSuccess: (): any => {},
+  showDialogue: (): any => {},
 });
 
 export const NotificationsProvider = ({ children }: any) => {
@@ -104,7 +110,12 @@ export const NotificationsProvider = ({ children }: any) => {
       data: { content: { message, title }, type: 'success' as NotificationType },
     });
   };
-
+  const showDialogue = (dialogueContent: DialogueContentI) => {
+    dispatch({
+      type: 'create',
+      data: { content: dialogueContent, type: 'dialogue' },
+    });
+  };
   return (
     <NotificationContext.Provider
       value={{
@@ -112,6 +123,7 @@ export const NotificationsProvider = ({ children }: any) => {
         dispatch,
         handleAxiosError,
         handleAxiosSuccess,
+        showDialogue,
       }}
     >
       {children}

@@ -17,6 +17,7 @@ export interface TableDictionaryProps<T extends AnyObjectWithId> {
   headList: TableHeadData<T>[];
   sortList: SortEl<T>[];
   className?: string;
+  deleteConfirmText?: string;
 }
 export type FieldType = 'input' | 'select';
 export interface OptionI {
