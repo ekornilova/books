@@ -1,4 +1,30 @@
-export const mockGetApiRequest = <T>(requestUrl: string, mockData: T) => {
+export const getPromise = <T>(mockData: T): Promise<T> => {
+  return new Promise<T>((resolve, reject) => {
+    setTimeout(() => {
+      const randomValue = Math.random();
+      if (randomValue < 0.5) {
+        resolve(mockData);
+      } else {
+        const error = new Error('error in server');
+        reject(error);
+      }
+    }, 500);
+  });
+};
+export const mockGetApiRequest = <T>(requestUrl: string, mockData: T): Promise<T> => {
+  return getPromise(mockData);
+  // new Promise<T>((resolve /* reject */) => {
+  //   setTimeout(() => {
+  //     resolve(mockData);
+  //   }, 500);
+  // });
+};
+
+export const mockPostApiRequest = <T>(
+  requestUrl: string,
+  payload: any,
+  mockData: T,
+): Promise<T> => {
   return new Promise<T>((resolve /* reject */) => {
     setTimeout(() => {
       resolve(mockData);
@@ -6,7 +32,11 @@ export const mockGetApiRequest = <T>(requestUrl: string, mockData: T) => {
   });
 };
 
-export const mockPostApiRequest = <T>(requestUrl: string, payload: any, mockData: T) => {
+export const mockUpdateApiRequest = <T>(
+  requestUrl: string,
+  payload: any,
+  mockData: T,
+): Promise<T> => {
   return new Promise<T>((resolve /* reject */) => {
     setTimeout(() => {
       resolve(mockData);
@@ -14,15 +44,7 @@ export const mockPostApiRequest = <T>(requestUrl: string, payload: any, mockData
   });
 };
 
-export const mockUpdateApiRequest = <T>(requestUrl: string, payload: any, mockData: T) => {
-  return new Promise<T>((resolve /* reject */) => {
-    setTimeout(() => {
-      resolve(mockData);
-    }, 500);
-  });
-};
-
-export const mockDeleteApiRequest = <T>(requestUrl: string, mockData: T) => {
+export const mockDeleteApiRequest = <T>(requestUrl: string, mockData: T): Promise<T> => {
   return new Promise<T>((resolve /* reject */) => {
     setTimeout(() => {
       resolve(mockData);

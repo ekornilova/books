@@ -1,8 +1,10 @@
 import React, { FC, Suspense } from 'react';
 import { Redirect } from 'react-router';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
 import { routes as routesConfig } from '../routes';
+import { store } from '../store';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -42,7 +44,11 @@ const AppContent: FC = () => {
 };
 
 const App: FC = () => {
-  return <InnerApp />;
+  return (
+    <Provider store={store}>
+      <InnerApp />
+    </Provider>
+  );
 };
 
 export default App;
