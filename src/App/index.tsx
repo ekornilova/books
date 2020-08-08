@@ -26,10 +26,11 @@ const InnerApp = connect(
   null,
   mapDispatchToProps,
 )(({ loadDictionaries }) => {
-  const { handleAxiosError } = useNotifications();
+  const { handleAxiosError, handleAxiosSuccess } = useNotifications();
   useEffect(() => {
     getDictionaries(authorsMock, shopsMock, genresMock)
       .then(([authors, shops, genres]) => {
+        handleAxiosSuccess('Perfect load');
         loadDictionaries({
           authors,
           shops,

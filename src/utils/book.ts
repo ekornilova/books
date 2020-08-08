@@ -15,6 +15,7 @@ export interface BookI {
   isbn?: string;
   coverImage?: string;
   quantityShopInfo: QuantityShopInfoI[];
+  commonCount?: number;
 }
 
 export const getBooks = (mockBooks: BookI[]): Promise<BookI[]> => {

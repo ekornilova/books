@@ -141,6 +141,7 @@ export const booksMock: BookI[] = [
     author: 4,
     name: 'Ruslan i Ludmila',
     quantityShopInfo: [],
+    isbn: '123456',
   },
   {
     id: 2,
@@ -148,6 +149,7 @@ export const booksMock: BookI[] = [
     author: 4,
     name: 'Kavkazskiy plennik',
     quantityShopInfo: [],
+    isbn: '1234566',
   },
   {
     id: 3,
@@ -155,6 +157,7 @@ export const booksMock: BookI[] = [
     author: 4,
     name: 'Gavriiliada',
     quantityShopInfo: [],
+    isbn: '1234567',
   },
   {
     id: 4,
@@ -162,6 +165,7 @@ export const booksMock: BookI[] = [
     author: 4,
     name: 'Bakhchisarayskiy fontan',
     quantityShopInfo: [],
+    isbn: '12345678',
   },
   {
     id: 5,
@@ -169,6 +173,7 @@ export const booksMock: BookI[] = [
     author: 2,
     name: 'Evenings on a Farm Near Dikanka',
     quantityShopInfo: [],
+    isbn: '1234569',
   },
   {
     id: 6,
@@ -176,6 +181,7 @@ export const booksMock: BookI[] = [
     author: 2,
     name: 'Viy',
     quantityShopInfo: [],
+    isbn: '123456000',
   },
   {
     id: 7,
@@ -183,6 +189,7 @@ export const booksMock: BookI[] = [
     author: 2,
     name: 'The Nose',
     quantityShopInfo: [],
+    isbn: '123456733',
   },
   {
     id: 11,
@@ -190,6 +197,7 @@ export const booksMock: BookI[] = [
     author: 1,
     name: 'War and Peace',
     quantityShopInfo: [],
+    isbn: '12345672',
   },
   {
     id: 8,
@@ -197,6 +205,7 @@ export const booksMock: BookI[] = [
     author: 1,
     name: 'Childhood',
     quantityShopInfo: [],
+    isbn: '1234567222',
   },
   {
     id: 9,
@@ -204,6 +213,7 @@ export const booksMock: BookI[] = [
     author: 1,
     name: 'Boyhood',
     quantityShopInfo: [],
+    isbn: '12345675',
   },
   {
     id: 10,
@@ -211,6 +221,7 @@ export const booksMock: BookI[] = [
     author: 1,
     name: 'Youth',
     quantityShopInfo: [],
+    isbn: '123456755',
   },
   {
     id: 12,
@@ -218,6 +229,7 @@ export const booksMock: BookI[] = [
     author: 3,
     name: 'Rudin',
     quantityShopInfo: [],
+    isbn: '1234567555',
   },
   {
     id: 13,
@@ -225,6 +237,7 @@ export const booksMock: BookI[] = [
     author: 3,
     name: 'Dvoryanskoye gnezdo',
     quantityShopInfo: [],
+    isbn: '12345676565',
   },
   {
     id: 14,
@@ -232,6 +245,7 @@ export const booksMock: BookI[] = [
     author: 3,
     name: 'Ottsy i deti',
     quantityShopInfo: [],
+    isbn: '123456712',
   },
   {
     id: 15,
@@ -239,6 +253,7 @@ export const booksMock: BookI[] = [
     author: 3,
     name: 'Asya',
     quantityShopInfo: [],
+    isbn: '12345671212',
   },
   {
     id: 16,
@@ -246,6 +261,7 @@ export const booksMock: BookI[] = [
     author: 5,
     name: 'Death of the Poet',
     quantityShopInfo: [],
+    isbn: '1234567121212',
   },
   {
     id: 17,
@@ -253,6 +269,7 @@ export const booksMock: BookI[] = [
     author: 5,
     name: 'Borodino',
     quantityShopInfo: [],
+    isbn: '12345673232',
   },
   {
     id: 18,
@@ -260,6 +277,7 @@ export const booksMock: BookI[] = [
     author: 5,
     name: 'A Hero of Our Time',
     quantityShopInfo: [],
+    isbn: '123456732',
   },
 ];
 export const shopsMock: ShopI[] = [
