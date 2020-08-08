@@ -2,7 +2,7 @@ export const getPromise = <T>(mockData: T): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
     setTimeout(() => {
       const randomValue = Math.random();
-      if (randomValue < 0.5) {
+      if (randomValue < 0.5 || true) {
         resolve(mockData);
       } else {
         const error = new Error('error in server');

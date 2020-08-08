@@ -7,13 +7,13 @@ import {
 import { QuantityShopInfoI } from './dictionaries/interface';
 
 export interface BookI {
-  id?: string;
+  id?: string | number;
   name: string;
-  description: string;
-  author: string;
-  genres: string[];
-  isbn: string;
-  coverImage: string;
+  description?: string;
+  author: string | number;
+  genres: (string | number)[];
+  isbn?: string;
+  coverImage?: string;
   quantityShopInfo: QuantityShopInfoI[];
 }
 

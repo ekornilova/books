@@ -1,17 +1,17 @@
 export interface ShopI {
-  id: string;
+  id: string | number;
   name: string;
-  address: string;
+  address?: string;
 }
 
 export interface QuantityShopInfoI {
-  shopId: string;
-  bookId: string;
+  shopId: string | number;
+  bookId: string | number;
   rests: number;
 }
 
 export interface AuthorI {
-  id: string;
+  id: string | number;
   firstName: string;
   lastName: string;
 }
@@ -22,4 +22,8 @@ export interface AddressI {
   street: string;
   house: string;
   zipCode: string;
+}
+export interface GenreI {
+  id: string | number;
+  name: string;
 }

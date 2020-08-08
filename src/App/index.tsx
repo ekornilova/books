@@ -1,26 +1,51 @@
-import React, { FC, Suspense } from 'react';
+import React, { FC, Suspense, useEffect } from 'react';
 import { Redirect } from 'react-router';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
 import { routes as routesConfig } from '../routes';
 import { store } from '../store';
+import { DisplayNotification, NotificationsProvider } from '../Components/NotificationPopup';
+import { useNotifications } from '../Components/NotificationPopup/ProviderNotification';
+import { SETDICTIONARIES } from '../store/constants';
+import { DictionaryI } from '../store/types';
+import { getDictionaries } from '../utils/dictionaries/index';
+import { genresMock, authorsMock, shopsMock } from '../utils/dictionaries/mock';
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0px;
-
   }
 `;
-
-const InnerApp: FC = () => {
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    loadDictionaries: (data: DictionaryI) => dispatch({ type: SETDICTIONARIES, data }),
+  };
+};
+const InnerApp = connect(
+  null,
+  mapDispatchToProps,
+)(({ loadDictionaries }) => {
+  const { handleAxiosError } = useNotifications();
+  useEffect(() => {
+    getDictionaries(authorsMock, shopsMock, genresMock)
+      .then(([authors, shops, genres]) => {
+        loadDictionaries({
+          authors,
+          shops,
+          genres,
+        } as DictionaryI);
+      })
+      .catch(handleAxiosError);
+  }, []);
   return (
     <BrowserRouter>
       <GlobalStyle />
+      <DisplayNotification />
       <AppContent />
     </BrowserRouter>
   );
-};
+});
 
 const AppContent: FC = () => {
   return (
@@ -46,7 +71,9 @@ const AppContent: FC = () => {
 const App: FC = () => {
   return (
     <Provider store={store}>
-      <InnerApp />
+      <NotificationsProvider>
+        <InnerApp />
+      </NotificationsProvider>
     </Provider>
   );
 };
