@@ -53,6 +53,7 @@ const StyledTableRow = styled(({ isDisabled, isCollapsed, isEdited, ...props }) 
   height: 190px;
   td {
     height: 100%;
+    padding: 4px;
   }
   `}
   pointer-events: ${(p: StyledTableRowProps) => p.isDisabled && 'none'};
@@ -111,7 +112,7 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
   return (
     <>
       <StyledTableRow
-        isEdited={isEdited}
+        isEdited={isEdit}
         isCollapsed={isCollapsed}
         hover={!open}
         tabIndex={-1}

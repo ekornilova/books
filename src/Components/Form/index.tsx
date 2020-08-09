@@ -20,11 +20,17 @@ export const StInput = styled((props) => <Input {...props} />)`
   flex-grow: 1;
 `;
 export const EditFieldWrapper = styled.div`
-  height: 100%;
+  height: 73px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   justify-items: flex-start;
+`;
+export const StSelect = styled(Select)`
+  .MuiTypography-body1 {
+    line-height: unset;
+  }
 `;
 export const EditField = <T extends AnyObjectWithId>({
   fieldSetting,
@@ -51,7 +57,7 @@ export const EditField = <T extends AnyObjectWithId>({
   switch (fieldSetting.type) {
     case 'select': {
       ComponentField = (
-        <Select
+        <StSelect
           onChange={handleChangeValue(fieldSetting.name as string)}
           forForm
           labelText={fieldSetting.label}
