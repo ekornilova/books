@@ -1,6 +1,6 @@
 import React from 'react';
 import { TableCell } from '@material-ui/core';
-import { FieldI, AnyObjectWithId } from './interfaces';
+import { AnyObjectWithId, FieldI } from '../../additional';
 
 interface TableCellFieldI<T extends AnyObjectWithId> extends FieldI<T> {
   value: string | number | (string | number)[];

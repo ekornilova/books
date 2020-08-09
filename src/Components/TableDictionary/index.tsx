@@ -21,7 +21,8 @@ import {
 import styled from 'styled-components';
 import { TableRowProps } from '@material-ui/core/TableRow';
 import { handleSort, showSortable, stableSort } from '../../additional/Sorter';
-import { TableDictionaryProps, AnyObjectWithId, RowTableProps } from './interfaces';
+import { AnyObjectWithId } from '../../additional';
+import { TableDictionaryProps, RowTableProps } from './interfaces';
 import TableCellField from './TableCellField';
 import { SortEl } from '../../additional/Sorter/interfaces';
 import { ScrollBar } from '../BasicElements';
@@ -235,38 +236,30 @@ const TableDictionary = <T extends AnyObjectWithId>({
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {
-                // currentList.length === 0 ? (
-                //   <TableCell colSpan={countColumns} align="center">
-                //     <>There is no data</>
-                //   </TableCell>
-                // ) : (
-                stableSort(currentList, sortables).map((column) => {
-                  let item: T = column;
-                  const isEditField = isEdited(edited, column);
-                  if (edited && column.id === edited.id) {
-                    item = edited;
-                  }
-                  const isDisabled = edited !== null && edited.id !== item.id;
-                  return (
-                    <TableRowDictionary
-                      handleCancelEditRow={cancellationData}
-                      handleSaveRow={saveData}
-                      handleStartEditRow={onEditRow && startEdit(item)}
-                      fieldSettings={fieldSettings}
-                      handleDeleteRow={onDeleteRow && onHandleRemove(item)}
-                      isDisabled={isDisabled}
-                      isCollapsed={isCollapsed}
-                      getCollapseElement={getCollapseElement}
-                      isEdit={isEditField}
-                      item={item}
-                      handleChangeFieldInRow={handleChange}
-                      countColumns={countColumns}
-                    />
-                  );
-                })
-                // )
-              }
+              {stableSort(currentList, sortables).map((column) => {
+                let item: T = column;
+                const isEditField = isEdited(edited, column);
+                if (edited && column.id === edited.id) {
+                  item = edited;
+                }
+                const isDisabled = edited !== null && edited.id !== item.id;
+                return (
+                  <TableRowDictionary
+                    handleCancelEditRow={cancellationData}
+                    handleSaveRow={saveData}
+                    handleStartEditRow={onEditRow && startEdit(item)}
+                    fieldSettings={fieldSettings}
+                    handleDeleteRow={onDeleteRow && onHandleRemove(item)}
+                    isDisabled={isDisabled}
+                    isCollapsed={isCollapsed}
+                    getCollapseElement={getCollapseElement}
+                    isEdit={isEditField}
+                    item={item}
+                    handleChangeFieldInRow={handleChange}
+                    countColumns={countColumns}
+                  />
+                );
+              })}
             </TableBody>
           </StTable>
         </ScrollBar>

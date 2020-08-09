@@ -1,4 +1,4 @@
-import { AnyObjectWithId } from '../../Components/TableDictionary/interfaces';
+import { AnyObjectWithId } from '../index';
 
 export const sortableFn = <T extends AnyObjectWithId>(a: T, b: T, orderBy: keyof T) => {
   if (typeof a[orderBy] === 'number' && typeof b[orderBy] === 'number') {

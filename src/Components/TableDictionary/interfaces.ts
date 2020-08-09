@@ -1,15 +1,26 @@
 import { ReactElement } from 'react';
-import { Alignment } from '../../additional';
+import { Alignment, AnyObjectWithId, FieldI } from '../../additional';
 import { DataH, SortEl } from '../../additional/Sorter/interfaces';
 
 export interface TableHeadData<K> extends DataH<K> {
   align: Alignment;
 }
 
-export type AnyObjectWithId = {
-  id?: string | number;
-  [key: string]: any;
-};
+// export type AnyObjectWithId = {
+//   id?: string | number;
+//   [key: string]: any;
+// };
+// export type FieldType = 'input' | 'select';
+// export interface OptionI {
+//   id: string | number;
+//   value?: string | number;
+// }
+// export interface FieldI<T extends AnyObjectWithId> {
+//   type?: FieldType;
+//   options?: OptionI[];
+//   defaultValue?: string | number;
+//   name: keyof T;
+// }
 export interface RowTableProps<T extends AnyObjectWithId> {
   isEdit?: boolean;
   handleChangeFieldInRow: (value: string | number | (string | number)[], name: keyof T) => void;
@@ -35,15 +46,4 @@ export interface TableDictionaryProps<T extends AnyObjectWithId> {
   deleteConfirmText?: string;
   isCollapsed?: boolean;
   getCollapseElement?: (item: T) => ReactElement;
-}
-export type FieldType = 'input' | 'select';
-export interface OptionI {
-  id: string | number;
-  value?: string | number;
-}
-export interface FieldI<T extends AnyObjectWithId> {
-  type?: FieldType;
-  options?: OptionI[];
-  defaultValue?: string | number;
-  name: keyof T;
 }

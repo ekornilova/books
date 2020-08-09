@@ -1,9 +1,7 @@
 import { sortableFn } from '../../additional/Sorter/helper';
-import { DictionaryI } from '../../store/types';
 import { BookI } from '../../utils/book';
 import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
-import { FieldI } from '../../Components/TableDictionary/interfaces';
-import { Alignment, Order } from '../../additional';
+import { Alignment, Order, FieldI, OptionI } from '../../additional';
 
 export const sortSettings = [
   {
@@ -21,11 +19,11 @@ export const sortSettings = [
     orderBy: 'isbn',
     sortableFn,
   },
-  //   {
-  //     order: 'desc' as Order,
-  //     orderBy: 'commonCount',
-  //     sortableFn,
-  //   }
+  {
+    order: 'desc' as Order,
+    orderBy: 'commonCount',
+    sortableFn,
+  },
 ];
 export const headerSettings = [
   {
@@ -65,7 +63,7 @@ export const headerSettings = [
   },
 ];
 
-export const getFieldSettings = (dictionaries: DictionaryI | null): FieldI<BookI>[] => {
+export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI<BookI>[] => {
   return [
     {
       name: 'name',
@@ -76,26 +74,12 @@ export const getFieldSettings = (dictionaries: DictionaryI | null): FieldI<BookI
     {
       type: 'select',
       name: 'author',
-      options: dictionaries
-        ? dictionaries.authors.map(({ id, firstName, lastName }) => {
-            return {
-              id,
-              value: `${firstName} ${lastName}`,
-            };
-          })
-        : [],
+      options: dictionaries ? dictionaries.authors : [],
     },
     {
       type: 'select',
       name: 'genres',
-      options: dictionaries
-        ? dictionaries.genres.map(({ id, name }) => {
-            return {
-              id,
-              value: name,
-            };
-          })
-        : [],
+      options: dictionaries ? dictionaries.genres : [],
     },
     {
       name: 'isbn',
@@ -108,21 +92,19 @@ export const getFieldSettings = (dictionaries: DictionaryI | null): FieldI<BookI
     },
   ];
 };
+export interface DictionaryOptionI {
+  shops: OptionI[];
+  authors: OptionI[];
+  genres: OptionI[];
+}
 export const getFieldSettingsInnerTable = (
-  dictionaries: DictionaryI | null,
+  dictionaries: DictionaryOptionI | null,
 ): FieldI<QuantityShopInfoI>[] => {
   return [
     {
       type: 'select',
       name: 'shopId',
-      options: dictionaries
-        ? dictionaries.shops.map(({ id, name }) => {
-            return {
-              id,
-              value: name,
-            };
-          })
-        : [],
+      options: dictionaries ? dictionaries.shops : [],
     },
     {
       name: 'rests',

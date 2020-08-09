@@ -10,6 +10,7 @@ import {
   headerSettingsInnerTable,
   sortSettingsInnerTable,
   getFieldSettingsInnerTable,
+  DictionaryOptionI,
 } from './tableSettings';
 import TableDictionary from '../../Components/TableDictionary';
 import { TextComponent } from '../../Components/BasicElements';
@@ -17,7 +18,12 @@ import { getBooks, BookI } from '../../utils/book';
 import { booksMock } from '../../utils/dictionaries/mock';
 import { SETBOOKS } from '../../store/constants';
 import { useNotifications } from '../../Components/NotificationPopup/ProviderNotification';
-import { getBooksWithCommonCount } from './helpers';
+import { getBooksWithCommonCount, getDictionaryOptions } from './helpers';
+import FilterForm, {
+  defaultFilterSettings,
+  getFilterFieldSettings,
+  FilterSettingsI,
+} from './FilterForm';
 
 const StyledCustomTableWrapper = styled.div<{ isInner?: boolean; height?: number }>`
   height: ${({ height }) => height || '50'}px;
@@ -30,14 +36,17 @@ const StyledCustomTableWrapper = styled.div<{ isInner?: boolean; height?: number
     bottom: 0;
   }
   ${({ isInner }) =>
-    isInner &&
-    `
+    isInner
+      ? `
   .MuiTableCell-stickyHeader {
     z-index: 1;
   }
-  `}
+  `
+      : `
+margin-top: 40px;
+`}
 `;
-const getCollapseElementForTable = (dictionaries: DictionaryI | null) => (item: BookI) => {
+const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (item: BookI) => {
   const list = item.quantityShopInfo.map((info) => {
     return {
       ...info,
@@ -62,6 +71,7 @@ const getCollapseElementForTable = (dictionaries: DictionaryI | null) => (item: 
 
 const BooksPage: FC<{ dictionaries: DictionaryI | null }> = ({ dictionaries, books }) => {
   const [filterBooks, setFilterBooks] = useState<BookI[]>(books);
+  const [filterValues, setFilterValues] = useState<FilterSettingsI>(defaultFilterSettings);
   const { handleAxiosError } = useNotifications();
   const getBooksFromServer = (items?: BookI[]) => {
     getBooks(items || booksMock)
@@ -73,20 +83,28 @@ const BooksPage: FC<{ dictionaries: DictionaryI | null }> = ({ dictionaries, boo
   useEffect(() => {
     getBooksFromServer();
   }, []);
+  const dictionaryOptions = getDictionaryOptions(dictionaries);
   return (
-    <StyledCustomTableWrapper height={filterBooks.length ? 400 : 70}>
-      <TableDictionary
-        sortList={sortSettings}
-        headList={headerSettings}
-        bodyList={filterBooks}
-        fieldSettings={getFieldSettings(dictionaries)}
-        deleteConfirmText="Do you really want to remove this book?"
-        isCollapsed
-        getCollapseElement={getCollapseElementForTable(dictionaries)}
-        onDeleteRow={() => {}}
-        onEditRow={() => {}}
+    <>
+      <FilterForm
+        value={filterValues}
+        setValue={setFilterValues}
+        fieldSettings={getFilterFieldSettings(dictionaryOptions)}
       />
-    </StyledCustomTableWrapper>
+      <StyledCustomTableWrapper height={filterBooks.length ? 400 : 70}>
+        <TableDictionary
+          sortList={sortSettings}
+          headList={headerSettings}
+          bodyList={filterBooks}
+          fieldSettings={getFieldSettings(dictionaryOptions)}
+          deleteConfirmText="Do you really want to remove this book?"
+          isCollapsed
+          getCollapseElement={getCollapseElementForTable(dictionaryOptions)}
+          onDeleteRow={() => {}}
+          onEditRow={() => {}}
+        />
+      </StyledCustomTableWrapper>
+    </>
   );
 };
 const mapStateToProps = (state: StoreI) => {

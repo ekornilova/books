@@ -1,5 +1,3 @@
-// import debounce from 'lodash/debounce';
-
 export function arrayMoveEnd(array: any[], i: number): void {
   const el: any = array[i];
   array.splice(i, 1);
@@ -14,11 +12,23 @@ export type Alignment = 'left' | 'right' | 'center' | 'justify' | 'inherit';
 
 export type Order = 'desc' | 'asc';
 
-// Функция для переключения order
 export const toggleOrder = (order: Order): Order => {
   return order === 'desc' ? 'asc' : 'desc';
 };
 
-// export const debouncedUpdate = debounce((fn: Function) => {
-//   fn();
-// }, 100);
+export type AnyObjectWithId = {
+  id?: string | number;
+  [key: string]: any;
+};
+export type FieldType = 'input' | 'select';
+export interface OptionI {
+  id: string | number;
+  value?: string | number;
+}
+export interface FieldI<T extends AnyObjectWithId> {
+  type?: FieldType;
+  options?: OptionI[];
+  defaultValue?: string | number;
+  name: keyof T;
+  label?: string;
+}
