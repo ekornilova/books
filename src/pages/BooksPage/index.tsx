@@ -76,10 +76,14 @@ const BooksPage: FC<{ dictionaries: DictionaryI | null }> = ({ dictionaries, boo
   const getBooksFromServer = (items?: BookI[]) => {
     getBooks(items || booksMock)
       .then((newBooks: BookI[]) => {
-        setFilterBooks(getBooksWithCommonCount(newBooks));
+        const bookValues: BookI[] = getBooksWithCommonCount(newBooks);
+        setFilterBooks(bookValues);
       })
       .catch(handleAxiosError);
   };
+  useEffect(() => {
+    console.log('filterValues', filterValues);
+  }, [filterValues]);
   useEffect(() => {
     getBooksFromServer();
   }, []);

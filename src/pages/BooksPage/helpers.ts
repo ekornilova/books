@@ -1,17 +1,17 @@
-/* eslint-disable */
 import { BookI } from '../../utils/book';
 import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
 import { DictionaryI } from '../../store/types';
 import { DictionaryOptionI } from './tableSettings';
 
-export const getBooksWithCommonCount = (books: BookI[]): BookI => {
+export const getBooksWithCommonCount = (books: BookI[]): BookI[] => {
   return books.map((book: BookI) => {
     const commonCount = (book.quantityShopInfo || []).reduce(
       (result: number, row: QuantityShopInfoI) => {
-        if (row.rests) {
-          result += Number(row.rests);
+        let newResult = result;
+        if (row.rests && typeof row.rests === 'number') {
+          newResult += Number(row.rests);
         }
-        return result;
+        return newResult;
       },
       0,
     );
@@ -47,4 +47,7 @@ export const getDictionaryOptions = (
         }),
       }
     : dictionaries;
+};
+export const onlyNumberField = (val: string | number) => {
+  return (val as string).replace(/[\D]*/g, '');
 };

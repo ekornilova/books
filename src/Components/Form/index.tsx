@@ -28,9 +28,13 @@ export const EditField = <T extends AnyObjectWithId>({
   const handleChangeValue = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist();
     onChange((oldVals: T) => {
+      const fieldValue =
+        typeof oldVals[field] === 'boolean' ? event.target.checked : event.target.value;
       const newVals = {
         ...oldVals,
-        [field]: typeof oldVals[field] === 'boolean' ? event.target.checked : event.target.value,
+        [field]: fieldSetting.onChangeValue
+          ? fieldSetting.onChangeValue(fieldValue as string | number)
+          : fieldValue,
       };
       return newVals;
     });

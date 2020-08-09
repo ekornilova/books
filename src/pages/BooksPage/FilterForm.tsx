@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Form from '../../Components/Form';
 import { DictionaryOptionI } from './tableSettings';
 import { FieldI } from '../../additional';
+import { onlyNumberField } from './helpers';
 
 export const defaultFilterSettings = {
   name: '',
@@ -31,14 +32,17 @@ export const getFilterFieldSettings = (
     {
       name: 'isbn',
       label: 'ISBN',
+      onChangeValue: onlyNumberField,
     },
     {
       name: 'commonCount_from',
       label: 'Min count',
+      onChangeValue: onlyNumberField,
     },
     {
       name: 'commonCount_to',
       label: 'Max count',
+      onChangeValue: onlyNumberField,
     },
   ];
 };
@@ -53,10 +57,10 @@ export interface FilterSettingsI {
 interface FilterFormI {
   value: FilterSettingsI;
   setValue: any;
-  //  (val: FilterSettingsI)=>FilterSettingsI,
   fieldSettings: FieldI<FilterSettingsI>[];
 }
 const StForm = styled(Form)`
+  margin-top: 20px;
   display: flex;
   width: 100%;
   align-items: center;
