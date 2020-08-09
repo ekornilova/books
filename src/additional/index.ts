@@ -20,7 +20,7 @@ export type AnyObjectWithId = {
   id?: string | number;
   [key: string]: any;
 };
-export type FieldType = 'input' | 'select';
+export type FieldType = 'input' | 'select' | 'image';
 export interface OptionI {
   id: string | number;
   value?: string | number;

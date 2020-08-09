@@ -25,6 +25,7 @@ export interface RowTableProps<T extends AnyObjectWithId> {
   countColumns: number;
   edit: T | null;
   onChangeEdit: any;
+  onImageClick?: (src: string) => void;
 }
 export interface TableDictionaryProps<T extends AnyObjectWithId> {
   bodyList: T[];

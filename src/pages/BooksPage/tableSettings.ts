@@ -66,13 +66,13 @@ export const headerSettings = [
     align: 'left' as Alignment,
   },
   {
-    field: 'Cover Image',
-    id: 'coverImage',
+    field: 'Total quantity on all stores',
+    id: 'commonCount',
     align: 'left' as Alignment,
   },
   {
-    field: 'Total quantity on all stores',
-    id: 'commonCount',
+    field: 'Cover Image',
+    id: 'coverImage',
     align: 'left' as Alignment,
   },
 ];
@@ -103,12 +103,13 @@ export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI
       isNotValid: isNotEmptyValid,
     },
     {
-      name: 'coverImage',
+      name: 'commonCount',
       isNotEdit: true,
     },
     {
-      name: 'commonCount',
+      name: 'coverImage',
       isNotEdit: true,
+      type: 'image',
     },
   ];
 };
@@ -131,9 +132,6 @@ export const getFieldSettingsInnerTable = (
       name: 'rests',
       onChangeValue: onlyNumberField,
       isNotValid: isNotNumberValid,
-      // (value: number | string) => {
-      //   return value > 0 ? '' : 'Count should be more than zero'
-      // }
     },
   ];
 };

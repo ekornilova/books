@@ -27,6 +27,7 @@ import { SortEl } from '../../additional/Sorter/interfaces';
 import { ScrollBar, Button } from '../BasicElements';
 import { useNotifications } from '../NotificationPopup/ProviderNotification';
 import { EditField } from '../Form';
+import ModalWindow from '../ModalWindow';
 
 interface StyledTableRowProps extends TableRowProps {
   isDisabled?: boolean;
@@ -79,6 +80,13 @@ const StTable = styled(Table)`
 const AddButton = styled(Button)`
   margin: 10px !important;
 `;
+const StyledImgModal = styled.img`
+  max-height: 800px;
+  max-width: 500px;
+  width: auto;
+  height: auto;
+  padding: 1%;
+`;
 const getList = <T extends unknown>(bodyList: T[]): T[] => {
   const clonedBodyList: T[] = [...bodyList];
   return clonedBodyList;
@@ -101,6 +109,7 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
   countColumns,
   edit,
   onChangeEdit,
+  onImageClick,
 }: RowTableProps<T>) => {
   const [open, setOpen] = React.useState<boolean>(false);
   const isValidRow =
@@ -133,7 +142,11 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
               )}
             </TableCell>
           ) : (
-            <TableCellField {...fieldSetting} value={item[fieldSetting.name]} />
+            <TableCellField
+              {...fieldSetting}
+              value={item[fieldSetting.name]}
+              onImageClick={onImageClick}
+            />
           );
         })}
         {!!(handleDeleteRow || handleStartEditRow) && (
@@ -194,6 +207,7 @@ const TableDictionary = <T extends AnyObjectWithId>({
   const { showDialogue } = useNotifications();
   const [sortables, setSortables] = React.useState<SortEl<T>[]>(sortList);
   const [edited, setEdited] = React.useState<T | null>(null);
+  const [imageSrc, setImageSrc] = React.useState<string>('');
   const currentList: T[] = getList(bodyList);
   const countColumns =
     fieldSettings.length + (isCollapsed ? 1 : 0) + (onDeleteRow || onEditRow ? 1 : 0);
@@ -255,10 +269,21 @@ const TableDictionary = <T extends AnyObjectWithId>({
   const cancellationData = (): void => {
     setEdited(null);
   };
+  const onOpenImageWindow = (src: string) => {
+    setImageSrc(src);
+  };
+  const onCloseImageWindow = () => {
+    setImageSrc('');
+  };
   const ariaLabel = isCollapsed ? 'collapsible table' : 'sticky table';
   const tableHeight = ((currentList.length || edited) && height) || 0;
   return (
     <StyledTableWrapper className={className} height={tableHeight}>
+      {imageSrc && (
+        <ModalWindow open={!!imageSrc} closeHandler={onCloseImageWindow}>
+          <StyledImgModal src={imageSrc} />
+        </ModalWindow>
+      )}
       <Paper>
         <TableWrapper>
           <ScrollBar ref={scrollRef}>
@@ -297,6 +322,7 @@ const TableDictionary = <T extends AnyObjectWithId>({
                       countColumns={countColumns}
                       edit={edited}
                       onChangeEdit={setEdited}
+                      onImageClick={onOpenImageWindow}
                     />
                   );
                 })}

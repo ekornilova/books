@@ -8,4 +8,7 @@ export const StyledDialogTitle = styled(DialogTitle)`
     display: flex;
     justify-content: space-between;
   }
+  .MuiTypography-root {
+    padding: 7px;
+  }
 `;

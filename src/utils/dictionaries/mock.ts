@@ -169,6 +169,8 @@ export const booksMock: BookI[] = [
     name: 'Ruslan i Ludmila',
     quantityShopInfo: getQuantityShopInfo(1),
     isbn: '123456',
+    coverImage:
+      'https://i3.mybook.io/p/512x852/book_covers/fb/b0/fbb08231-7d97-4f74-ab70-49f67738a748.jpg?v2',
   },
   {
     id: 2,
