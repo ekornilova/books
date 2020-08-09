@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   CancelRounded,
   DeleteRounded,
@@ -190,6 +190,7 @@ const TableDictionary = <T extends AnyObjectWithId>({
   className,
   height = 50,
 }: TableDictionaryProps<T>) => {
+  const scrollRef = useRef(null);
   const { showDialogue } = useNotifications();
   const [sortables, setSortables] = React.useState<SortEl<T>[]>(sortList);
   const [edited, setEdited] = React.useState<T | null>(null);
@@ -244,6 +245,11 @@ const TableDictionary = <T extends AnyObjectWithId>({
         id: ID_NEW_ITEM,
       };
       setEdited(newItem);
+      setTimeout(() => {
+        if (scrollRef && scrollRef.current && scrollRef.current.scrollToBottom) {
+          scrollRef.current.scrollToBottom();
+        }
+      }, 300);
     }
   };
   const cancellationData = (): void => {
@@ -255,7 +261,7 @@ const TableDictionary = <T extends AnyObjectWithId>({
     <StyledTableWrapper className={className} height={tableHeight}>
       <Paper>
         <TableWrapper>
-          <ScrollBar>
+          <ScrollBar ref={scrollRef}>
             <StTable stickyHeader aria-label={ariaLabel}>
               <TableHead>
                 <StyledTableRow>

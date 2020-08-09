@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, forwardRef, Ref } from 'react';
 import styled from 'styled-components';
 import Scrollbar from 'react-scrollbars-custom';
 
@@ -30,67 +30,70 @@ export const ScrollbarWithCondition: React.FC<{ showScrollBar: boolean }> = ({
 }) => {
   return showScrollBar ? <StyledScrollbar>{children}</StyledScrollbar> : <>{children}</>;
 };
-const StyledScrollbar: FC<{ scrollTop?: number }> = ({ children, scrollTop, ...rootProps }) => (
-  <Scrollbar
-    scrollTop={scrollTop}
-    trackYProps={{
-      renderer: (props) => {
-        const { elementRef, ...restProps } = props;
-        return (
-          <StyledTrackY
-            {...restProps}
-            ref={elementRef}
-            className="ScrollbarsCustom-Track ScrollbarsCustom-TrackY"
-          />
-        );
-      },
-    }}
-    thumbYProps={{
-      renderer: (props) => {
-        const { elementRef, ...restProps } = props;
-        return (
-          <StyledThumbY
-            {...restProps}
-            ref={elementRef}
-            className="ScrollbarsCustom-Thumb ScrollbarsCustom-ThumbY"
-          />
-        );
-      },
-    }}
-    trackXProps={{
-      renderer: (props) => {
-        const { elementRef, ...restProps } = props;
-        return (
-          <StyledTrackX
-            {...restProps}
-            ref={elementRef}
-            className="ScrollbarsCustom-Track ScrollbarsCustom-TrackX"
-          />
-        );
-      },
-    }}
-    thumbXProps={{
-      renderer: (props) => {
-        const { elementRef, ...restProps } = props;
-        return (
-          <StyledThumbX
-            {...restProps}
-            ref={elementRef}
-            className="ScrollbarsCustom-Thumb ScrollbarsCustom-ThumbX"
-          />
-        );
-      },
-    }}
-    wrapperProps={{
-      renderer: (props) => {
-        const { elementRef, ...restProps } = props;
-        return <div {...restProps} ref={elementRef} className="ScrollbarsCustom-Wrapper" />;
-      },
-    }}
-    {...rootProps}
-  >
-    {children}
-  </Scrollbar>
+const StyledScrollbar: FC<{ scrollTop?: number; ref?: Ref<HTMLDivElement> }> = forwardRef(
+  ({ children, scrollTop, ...rootProps }, ref) => (
+    <Scrollbar
+      scrollTop={scrollTop}
+      ref={ref}
+      trackYProps={{
+        renderer: (props) => {
+          const { elementRef, ...restProps } = props;
+          return (
+            <StyledTrackY
+              {...restProps}
+              ref={elementRef}
+              className="ScrollbarsCustom-Track ScrollbarsCustom-TrackY"
+            />
+          );
+        },
+      }}
+      thumbYProps={{
+        renderer: (props) => {
+          const { elementRef, ...restProps } = props;
+          return (
+            <StyledThumbY
+              {...restProps}
+              ref={elementRef}
+              className="ScrollbarsCustom-Thumb ScrollbarsCustom-ThumbY"
+            />
+          );
+        },
+      }}
+      trackXProps={{
+        renderer: (props) => {
+          const { elementRef, ...restProps } = props;
+          return (
+            <StyledTrackX
+              {...restProps}
+              ref={elementRef}
+              className="ScrollbarsCustom-Track ScrollbarsCustom-TrackX"
+            />
+          );
+        },
+      }}
+      thumbXProps={{
+        renderer: (props) => {
+          const { elementRef, ...restProps } = props;
+          return (
+            <StyledThumbX
+              {...restProps}
+              ref={elementRef}
+              className="ScrollbarsCustom-Thumb ScrollbarsCustom-ThumbX"
+            />
+          );
+        },
+      }}
+      wrapperProps={{
+        renderer: (props) => {
+          const { elementRef, ...restProps } = props;
+          return <div {...restProps} ref={elementRef} className="ScrollbarsCustom-Wrapper" />;
+        },
+      }}
+      {...rootProps}
+    >
+      {children}
+    </Scrollbar>
+  ),
 );
 
 export default StyledScrollbar;
