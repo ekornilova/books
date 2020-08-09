@@ -235,11 +235,12 @@ const TableDictionary = <T extends AnyObjectWithId>({
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {currentList.length === 0 ? (
-                <TableCell colSpan={countColumns} align="center">
-                  <>There is no data</>
-                </TableCell>
-              ) : (
+              {
+                // currentList.length === 0 ? (
+                //   <TableCell colSpan={countColumns} align="center">
+                //     <>There is no data</>
+                //   </TableCell>
+                // ) : (
                 stableSort(currentList, sortables).map((column) => {
                   let item: T = column;
                   const isEditField = isEdited(edited, column);
@@ -263,73 +264,9 @@ const TableDictionary = <T extends AnyObjectWithId>({
                       countColumns={countColumns}
                     />
                   );
-                  //   return (
-                  //     <StyledTableRow
-                  //       key={item.id}
-                  //       hover
-                  //       tabIndex={-1}
-                  //       isDisabled={edited !== null && edited.id !== item.id}
-                  //     >
-                  //       {isEditField ? (
-                  //         <>
-                  //           <TableCell>
-                  //             <TextField
-                  //               value={item.name}
-                  //               onChange={(e) => handleChange(e.target.value, 'name')}
-                  //             />
-                  //           </TableCell>
-                  //           <TableCell>
-                  //             <TextField
-                  //               value={item.city}
-                  //               onChange={(e) => handleChange(e.target.value, 'city')}
-                  //             />
-                  //           </TableCell>
-                  //           <TableCell>
-                  //             <TextField
-                  //               value={item.address}
-                  //               onChange={(e) => handleChange(e.target.value, 'address')}
-                  //             />
-                  //           </TableCell>
-                  //           <TableCell>
-                  //             <TextField
-                  //               value={item.phone}
-                  //               onChange={(e) => handleChange(e.target.value, 'phone')}
-                  //             />
-                  //           </TableCell>
-                  //         </>
-                  //       ) : (
-                  //         <>
-                  //           {fieldSettings.map((fieldSetting) => {
-                  //             return (
-                  //               <TableCellField {...fieldSetting} value={item[fieldSetting.name]} />
-                  //             );
-                  //           })}
-                  //         </>
-                  //       )}
-
-                  //       {isEditField ? (
-                  //         <StyledTableCell>
-                  //           <IconButton onClick={saveData}>
-                  //             <SaveRounded color="primary" />
-                  //           </IconButton>
-                  //           <IconButton onClick={cancellationData}>
-                  //             <CancelRounded color="error" />
-                  //           </IconButton>
-                  //         </StyledTableCell>
-                  //       ) : (
-                  //         <StyledTableCell>
-                  //           <IconButton onClick={onHandleRemove(item)}>
-                  //             <DeleteRounded color="error" />
-                  //           </IconButton>
-                  //           <IconButton onClick={startEdit(item)}>
-                  //             <EditRounded color="primary" />
-                  //           </IconButton>
-                  //         </StyledTableCell>
-                  //       )}
-                  //     </StyledTableRow>
-                  //   );
                 })
-              )}
+                // )
+              }
             </TableBody>
           </StTable>
         </ScrollBar>

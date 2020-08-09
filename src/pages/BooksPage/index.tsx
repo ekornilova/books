@@ -17,21 +17,10 @@ import { getBooks, BookI } from '../../utils/book';
 import { booksMock } from '../../utils/dictionaries/mock';
 import { SETBOOKS } from '../../store/constants';
 import { useNotifications } from '../../Components/NotificationPopup/ProviderNotification';
+import { getBooksWithCommonCount } from './helpers';
 
-const StyledCustomTableWrapper = styled.div`
-  height: 450px;
-  position: relative;
-  > * {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 1000;
-  }
-`;
-const StyledCustomInnerTableWrapper = styled.div`
-  height: 150px;
+const StyledCustomTableWrapper = styled.div<{ isInner?: boolean; height?: number }>`
+  height: ${({ height }) => height || '50'}px;
   position: relative;
   > * {
     position: absolute;
@@ -40,37 +29,44 @@ const StyledCustomInnerTableWrapper = styled.div`
     left: 0;
     bottom: 0;
   }
+  ${({ isInner }) =>
+    isInner &&
+    `
   .MuiTableCell-stickyHeader {
     z-index: 1;
   }
+  `}
 `;
 const getCollapseElementForTable = (dictionaries: DictionaryI | null) => (item: BookI) => {
+  const list = item.quantityShopInfo.map((info) => {
+    return {
+      ...info,
+      id: info.shopId,
+    };
+  });
+
   return (
     <Box margin={1}>
       <TextComponent text="Shop Data" gutterBottom />
-      <StyledCustomInnerTableWrapper>
+      <StyledCustomTableWrapper isInner height={list.length ? 150 : 50}>
         <TableDictionary
-          bodyList={item.quantityShopInfo.map((info) => {
-            return {
-              ...info,
-              id: info.shopId,
-            };
-          })}
+          bodyList={list}
           headList={headerSettingsInnerTable}
           sortList={sortSettingsInnerTable}
           fieldSettings={getFieldSettingsInnerTable(dictionaries)}
         />
-      </StyledCustomInnerTableWrapper>
+      </StyledCustomTableWrapper>
     </Box>
   );
 };
+
 const BooksPage: FC<{ dictionaries: DictionaryI | null }> = ({ dictionaries, books }) => {
   const [filterBooks, setFilterBooks] = useState<BookI[]>(books);
   const { handleAxiosError } = useNotifications();
   const getBooksFromServer = (items?: BookI[]) => {
     getBooks(items || booksMock)
-      .then((newBooks) => {
-        setFilterBooks(newBooks);
+      .then((newBooks: BookI[]) => {
+        setFilterBooks(getBooksWithCommonCount(newBooks));
       })
       .catch(handleAxiosError);
   };
@@ -78,7 +74,7 @@ const BooksPage: FC<{ dictionaries: DictionaryI | null }> = ({ dictionaries, boo
     getBooksFromServer();
   }, []);
   return (
-    <StyledCustomTableWrapper>
+    <StyledCustomTableWrapper height={filterBooks.length ? 400 : 70}>
       <TableDictionary
         sortList={sortSettings}
         headList={headerSettings}
