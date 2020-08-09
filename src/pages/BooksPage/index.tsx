@@ -14,11 +14,11 @@ import {
 } from './tableSettings';
 import TableDictionary from '../../Components/TableDictionary';
 import { TextComponent } from '../../Components/BasicElements';
-import { getBooks, BookI } from '../../utils/book';
+import { getBooks, BookI, deleteBook } from '../../utils/book';
 import { booksMock } from '../../utils/dictionaries/mock';
 import { SETBOOKS } from '../../store/constants';
 import { useNotifications } from '../../Components/NotificationPopup/ProviderNotification';
-import { getBooksWithCommonCount, getDictionaryOptions } from './helpers';
+import { getBooksWithCommonCount, getDictionaryOptions, getFilteredBooks } from './helpers';
 import FilterForm, {
   defaultFilterSettings,
   getFilterFieldSettings,
@@ -69,25 +69,41 @@ const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (
   );
 };
 
-const BooksPage: FC<{ dictionaries: DictionaryI | null }> = ({ dictionaries, books }) => {
+const BooksPage: FC<{
+  dictionaries: DictionaryI | null;
+  books: BookI[];
+  setBooks: (val: BookI[]) => void;
+}> = ({ dictionaries, books, setBooks }) => {
   const [filterBooks, setFilterBooks] = useState<BookI[]>(books);
   const [filterValues, setFilterValues] = useState<FilterSettingsI>(defaultFilterSettings);
   const { handleAxiosError } = useNotifications();
   const getBooksFromServer = (items?: BookI[]) => {
     getBooks(items || booksMock)
       .then((newBooks: BookI[]) => {
-        const bookValues: BookI[] = getBooksWithCommonCount(newBooks);
-        setFilterBooks(bookValues);
+        setBooks(getBooksWithCommonCount(newBooks));
+        // const bookValues: BookI[] = getFilteredBooks(getBooksWithCommonCount(newBooks), filterValues);
+        // setFilterBooks(bookValues);
       })
       .catch(handleAxiosError);
   };
   useEffect(() => {
-    console.log('filterValues', filterValues);
-  }, [filterValues]);
+    const bookValues: BookI[] = getFilteredBooks(books, filterValues);
+    setFilterBooks(bookValues);
+  }, [filterValues, books]);
   useEffect(() => {
     getBooksFromServer();
   }, []);
   const dictionaryOptions = getDictionaryOptions(dictionaries);
+  const onDeleteBook = (bookForDelete: BookI) => {
+    const findIdx = books.findIndex((book) => book.id === bookForDelete.id);
+    deleteBook((bookForDelete.id as string) || '', bookForDelete)
+      .then(() => {
+        const newBooks = [...books];
+        newBooks.splice(findIdx, 1);
+        getBooksFromServer(newBooks);
+      })
+      .catch(handleAxiosError);
+  };
   return (
     <>
       <FilterForm
@@ -104,7 +120,7 @@ const BooksPage: FC<{ dictionaries: DictionaryI | null }> = ({ dictionaries, boo
           deleteConfirmText="Do you really want to remove this book?"
           isCollapsed
           getCollapseElement={getCollapseElementForTable(dictionaryOptions)}
-          onDeleteRow={() => {}}
+          onDeleteRow={onDeleteBook}
           onEditRow={() => {}}
         />
       </StyledCustomTableWrapper>

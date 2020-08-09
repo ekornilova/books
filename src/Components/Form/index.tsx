@@ -46,7 +46,7 @@ export const EditField = <T extends AnyObjectWithId>({
           onChange={handleChangeValue(fieldSetting.name as string)}
           forForm
           labelText={fieldSetting.label}
-          value={value[fieldSetting.name] || fieldSetting.defaultValue}
+          value={value[fieldSetting.name]}
           values={fieldSetting.options || []}
         />
       );

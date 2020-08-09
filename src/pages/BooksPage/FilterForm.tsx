@@ -4,10 +4,13 @@ import Form from '../../Components/Form';
 import { DictionaryOptionI } from './tableSettings';
 import { FieldI } from '../../additional';
 import { onlyNumberField } from './helpers';
+import { Button } from '../../Components/BasicElements';
 
 export const defaultFilterSettings = {
   name: '',
   isbn: '',
+  author: '',
+  genres: '',
 };
 export const getFilterFieldSettings = (
   dictionaries: DictionaryOptionI | null,
@@ -59,10 +62,19 @@ interface FilterFormI {
   setValue: any;
   fieldSettings: FieldI<FilterSettingsI>[];
 }
-const StForm = styled(Form)`
+const FilterFormWrapper = styled.div`
   margin-top: 20px;
   display: flex;
   width: 100%;
+  align-items: center;
+  align-content: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-items: center;
+`;
+const StForm = styled(Form)`
+  display: flex;
+  width: 90%;
   align-items: center;
   align-content: center;
   justify-content: space-around;
@@ -75,7 +87,15 @@ const StForm = styled(Form)`
   }
 `;
 const FilterForm: FC<FilterFormI> = ({ value, setValue, fieldSettings }) => {
-  return <StForm value={value} onChange={setValue} fieldSettings={fieldSettings} />;
+  const onClearFilterSettings = () => {
+    setValue(defaultFilterSettings);
+  };
+  return (
+    <FilterFormWrapper>
+      <StForm value={value} onChange={setValue} fieldSettings={fieldSettings} />
+      <Button onClick={onClearFilterSettings}>CLEAR</Button>
+    </FilterFormWrapper>
+  );
 };
 
 export default FilterForm;
