@@ -16,7 +16,7 @@ export interface RowTableProps<T extends AnyObjectWithId> {
   handleStartEditRow?: () => void;
   handleCancelEditRow: () => void;
   isCollapsed?: boolean;
-  getCollapseElement?: (item: T) => ReactElement;
+  getCollapseElement?: (item: T, isEdit?: boolean, edited?: T, onChange?: any) => ReactElement;
   isDisabled?: boolean;
   countColumns: number;
   edit: T;

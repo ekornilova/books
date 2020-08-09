@@ -15,6 +15,7 @@ const SelectFullComponent: React.FC<{
   getAdditionalComps?: (itemValue: string | number) => React.ReactNode;
   Icon?: ComponentType<SvgIconProps>;
   open?: boolean;
+  isMultiple?: boolean;
 }> = ({
   onChange,
   value,
@@ -26,6 +27,7 @@ const SelectFullComponent: React.FC<{
   getAdditionalComps,
   variant,
   open,
+  isMultiple,
 }) => {
   const selectComponent = (
     <Select
@@ -37,6 +39,7 @@ const SelectFullComponent: React.FC<{
       variant={variant}
       Icon={Icon}
       open={open}
+      isMultiple={isMultiple}
     />
   );
   return forForm ? (

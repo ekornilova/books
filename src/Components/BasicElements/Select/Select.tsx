@@ -3,6 +3,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
 import { OptionI } from '../../../additional';
+import TextComponent from '../TextComponent';
 
 const SelectComponent: React.FC<{
   onChange: (
@@ -16,7 +17,18 @@ const SelectComponent: React.FC<{
   variant?: 'filled' | 'outlined' | 'standard' | undefined;
   Icon?: ComponentType<SvgIconProps>;
   open?: boolean;
-}> = ({ onChange, value, values, className, getAdditionalComps, variant, Icon, open }) => {
+  isMultiple?: boolean;
+}> = ({
+  onChange,
+  value,
+  values,
+  className,
+  getAdditionalComps,
+  variant,
+  Icon,
+  open,
+  isMultiple,
+}) => {
   const [curValue, setCurValue] = useState<string | number | null>(value);
   useEffect(() => {
     setCurValue(value);
@@ -26,13 +38,28 @@ const SelectComponent: React.FC<{
   ) => {
     onChange(event as React.ChangeEvent<HTMLInputElement>);
   };
+  const isSelectMultiple = isMultiple || Array.isArray(curValue);
   return (
     <Select
+      multiple={isSelectMultiple}
       value={curValue}
       onChange={onSelectChange}
       className={className}
       variant={variant}
       IconComponent={Icon}
+      {...(isSelectMultiple
+        ? {
+            renderValue: (selected: (string | number)[]) => {
+              const selectedValue = selected
+                .map((item) => {
+                  const findOption = values.find((val) => val.id === item);
+                  return findOption ? findOption.value || findOption.id : '';
+                })
+                .join(', ');
+              return <TextComponent text={selectedValue} />;
+            },
+          }
+        : {})}
       {...(open !== undefined
         ? {
             open,

@@ -159,7 +159,7 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={countColumns}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              {getCollapseElement ? getCollapseElement(item) : null}
+              {getCollapseElement ? getCollapseElement(item, isEdit, edit, onChangeEdit) : null}
             </Collapse>
           </TableCell>
         </TableRow>
@@ -193,14 +193,24 @@ const TableDictionary = <T extends AnyObjectWithId>({
 
   const onHandleRemove = (item: T): (() => void) => {
     return () => {
-      showDialogue({
-        onAccept: () => {
-          if (onDeleteRow) {
-            onDeleteRow(item);
-          }
-        },
-        modalText: deleteConfirmText || '',
-      });
+      const tryToDelete = () => {
+        if (onDeleteRow) {
+          onDeleteRow(item);
+        }
+      };
+      if (deleteConfirmText) {
+        showDialogue({
+          onAccept: () => {
+            tryToDelete();
+            // if (onDeleteRow) {
+            //   onDeleteRow(item);
+            // }
+          },
+          modalText: deleteConfirmText || '',
+        });
+      } else {
+        tryToDelete();
+      }
     };
   };
   // const handleChange = (value: string | number | (string | number)[], orderBy: keyof T): void => {

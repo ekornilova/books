@@ -15,6 +15,7 @@ import {
 import TableDictionary from '../../Components/TableDictionary';
 import { TextComponent } from '../../Components/BasicElements';
 import { getBooks, BookI, deleteBook, updateBook } from '../../utils/book';
+import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
 import { booksMock } from '../../utils/dictionaries/mock';
 import { SETBOOKS } from '../../store/constants';
 import { useNotifications } from '../../Components/NotificationPopup/ProviderNotification';
@@ -46,14 +47,41 @@ const StyledCustomTableWrapper = styled.div<{ isInner?: boolean; height?: number
 margin-top: 40px;
 `}
 `;
-const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (item: BookI) => {
-  const list = item.quantityShopInfo.map((info) => {
+const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (
+  item: BookI,
+  isEdit?: boolean,
+  edited?: BookI,
+  onChange?: any,
+) => {
+  const list = ((isEdit ? edited : item) || item).quantityShopInfo.map((info, idx) => {
     return {
       ...info,
-      id: info.shopId,
+      id: idx, // info.shopId,
     };
   });
-
+  const onActionRow = (action: 'delete' | 'edit') => (row: QuantityShopInfoI) => {
+    onChange((oldBook: BookI) => {
+      const isDelete = action === 'delete';
+      const findIdx = row.id;
+      const newQuantityShopInfo = [...(oldBook.quantityShopInfo || [])];
+      if (isDelete) {
+        newQuantityShopInfo.splice(findIdx, 1);
+      } else {
+        // delete row.id;
+        newQuantityShopInfo.splice(findIdx, 1, row);
+      }
+      return {
+        ...oldBook,
+        quantityShopInfo: newQuantityShopInfo,
+      };
+    });
+  };
+  const additionalProps = isEdit
+    ? {
+        onEditRow: onActionRow('edit'),
+        onDeleteRow: onActionRow('delete'),
+      }
+    : {};
   return (
     <Box margin={1}>
       <TextComponent text="Shop Data" gutterBottom />
@@ -63,6 +91,7 @@ const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (
           headList={headerSettingsInnerTable}
           sortList={sortSettingsInnerTable}
           fieldSettings={getFieldSettingsInnerTable(dictionaries)}
+          {...additionalProps}
         />
       </StyledCustomTableWrapper>
     </Box>
@@ -92,16 +121,6 @@ const BooksPage: FC<{
     getBooksFromServer();
   }, []);
   const dictionaryOptions = getDictionaryOptions(dictionaries);
-  // const onDeleteBook = (bookForDelete: BookI) => {
-  //   const findIdx = books.findIndex((book) => book.id === bookForDelete.id);
-  //   deleteBook((bookForDelete.id as string) || '', bookForDelete)
-  //     .then(() => {
-  //       const newBooks = [...books];
-  //       newBooks.splice(findIdx, 1);
-  //       getBooksFromServer(newBooks);
-  //     })
-  //     .catch(handleAxiosError);
-  // };
   const onActionBook = (action: 'delete' | 'edit') => (bookForAction: BookI) => {
     const findIdx = books.findIndex((book) => book.id === bookForAction.id);
     const isDelete = action === 'delete';
@@ -125,7 +144,7 @@ const BooksPage: FC<{
         setValue={setFilterValues}
         fieldSettings={getFilterFieldSettings(dictionaryOptions)}
       />
-      <StyledCustomTableWrapper height={filterBooks.length ? 400 : 70}>
+      <StyledCustomTableWrapper height={filterBooks.length ? 500 : 70}>
         <TableDictionary
           sortList={sortSettings}
           headList={headerSettings}

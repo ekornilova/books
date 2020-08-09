@@ -2,6 +2,7 @@ import { sortableFn } from '../../additional/Sorter/helper';
 import { BookI } from '../../utils/book';
 import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
 import { Alignment, Order, FieldI, OptionI } from '../../additional';
+import { onlyNumberField } from './helpers';
 
 export const sortSettings = [
   {
@@ -110,6 +111,7 @@ export const getFieldSettingsInnerTable = (
     },
     {
       name: 'rests',
+      onChangeValue: onlyNumberField,
     },
   ];
 };
