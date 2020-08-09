@@ -86,9 +86,11 @@ export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI
     },
     {
       name: 'coverImage',
+      isNotEdit: true,
     },
     {
       name: 'commonCount',
+      isNotEdit: true,
     },
   ];
 };

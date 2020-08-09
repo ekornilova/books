@@ -33,4 +33,5 @@ export interface FieldI<T extends AnyObjectWithId> {
   label?: string;
   isValid?: (val: string | number) => boolean;
   onChangeValue?: (val: string | number) => string | number;
+  isNotEdit?: boolean;
 }

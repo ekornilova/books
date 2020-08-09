@@ -14,7 +14,7 @@ import {
 } from './tableSettings';
 import TableDictionary from '../../Components/TableDictionary';
 import { TextComponent } from '../../Components/BasicElements';
-import { getBooks, BookI, deleteBook } from '../../utils/book';
+import { getBooks, BookI, deleteBook, updateBook } from '../../utils/book';
 import { booksMock } from '../../utils/dictionaries/mock';
 import { SETBOOKS } from '../../store/constants';
 import { useNotifications } from '../../Components/NotificationPopup/ProviderNotification';
@@ -81,8 +81,6 @@ const BooksPage: FC<{
     getBooks(items || booksMock)
       .then((newBooks: BookI[]) => {
         setBooks(getBooksWithCommonCount(newBooks));
-        // const bookValues: BookI[] = getFilteredBooks(getBooksWithCommonCount(newBooks), filterValues);
-        // setFilterBooks(bookValues);
       })
       .catch(handleAxiosError);
   };
@@ -94,12 +92,28 @@ const BooksPage: FC<{
     getBooksFromServer();
   }, []);
   const dictionaryOptions = getDictionaryOptions(dictionaries);
-  const onDeleteBook = (bookForDelete: BookI) => {
-    const findIdx = books.findIndex((book) => book.id === bookForDelete.id);
-    deleteBook((bookForDelete.id as string) || '', bookForDelete)
+  // const onDeleteBook = (bookForDelete: BookI) => {
+  //   const findIdx = books.findIndex((book) => book.id === bookForDelete.id);
+  //   deleteBook((bookForDelete.id as string) || '', bookForDelete)
+  //     .then(() => {
+  //       const newBooks = [...books];
+  //       newBooks.splice(findIdx, 1);
+  //       getBooksFromServer(newBooks);
+  //     })
+  //     .catch(handleAxiosError);
+  // };
+  const onActionBook = (action: 'delete' | 'edit') => (bookForAction: BookI) => {
+    const findIdx = books.findIndex((book) => book.id === bookForAction.id);
+    const isDelete = action === 'delete';
+    const actionRequest = isDelete ? deleteBook : updateBook;
+    actionRequest((bookForAction.id as string) || '', bookForAction)
       .then(() => {
         const newBooks = [...books];
-        newBooks.splice(findIdx, 1);
+        if (isDelete) {
+          newBooks.splice(findIdx, 1);
+        } else {
+          newBooks.splice(findIdx, 1, bookForAction);
+        }
         getBooksFromServer(newBooks);
       })
       .catch(handleAxiosError);
@@ -120,8 +134,8 @@ const BooksPage: FC<{
           deleteConfirmText="Do you really want to remove this book?"
           isCollapsed
           getCollapseElement={getCollapseElementForTable(dictionaryOptions)}
-          onDeleteRow={onDeleteBook}
-          onEditRow={() => {}}
+          onDeleteRow={onActionBook('delete')}
+          onEditRow={onActionBook('edit')}
         />
       </StyledCustomTableWrapper>
     </>

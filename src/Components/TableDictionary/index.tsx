@@ -15,7 +15,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TextField,
   Collapse,
 } from '@material-ui/core';
 import styled from 'styled-components';
@@ -27,6 +26,7 @@ import TableCellField from './TableCellField';
 import { SortEl } from '../../additional/Sorter/interfaces';
 import { ScrollBar } from '../BasicElements';
 import { useNotifications } from '../NotificationPopup/ProviderNotification';
+import { EditField } from '../Form';
 
 interface StyledTableRowProps extends TableRowProps {
   isDisabled?: boolean;
@@ -67,7 +67,7 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
   isEdit,
   getCollapseElement,
   handleCancelEditRow,
-  handleChangeFieldInRow,
+  // handleChangeFieldInRow,
   handleDeleteRow,
   handleStartEditRow,
   handleSaveRow,
@@ -75,6 +75,8 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
   isDisabled,
   fieldSettings,
   countColumns,
+  edit,
+  onChangeEdit,
 }: RowTableProps<T>) => {
   const [open, setOpen] = React.useState<boolean>(false);
   return (
@@ -87,7 +89,7 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
             </IconButton>
           </TableCell>
         )}
-        {isEdit ? (
+        {/* {isEdit ? (
           <>
             <TableCell>
               <TextField
@@ -115,12 +117,20 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
             </TableCell>
           </>
         ) : (
-          <>
-            {fieldSettings.map((fieldSetting) => {
-              return <TableCellField {...fieldSetting} value={item[fieldSetting.name]} />;
-            })}
-          </>
-        )}
+          <> */}
+        {fieldSettings.map((fieldSetting) => {
+          return isEdit ? (
+            <TableCell>
+              {!fieldSetting.isNotEdit && (
+                <EditField value={edit} fieldSetting={fieldSetting} onChange={onChangeEdit} />
+              )}
+            </TableCell>
+          ) : (
+            <TableCellField {...fieldSetting} value={item[fieldSetting.name]} />
+          );
+        })}
+        {/* </>
+        )} */}
         {!!(handleDeleteRow || handleStartEditRow) && (
           <StyledTableCell>
             {isEdit ? (
@@ -193,13 +203,13 @@ const TableDictionary = <T extends AnyObjectWithId>({
       });
     };
   };
-  const handleChange = (value: string | number | (string | number)[], orderBy: keyof T): void => {
-    if (edited) {
-      const cloneEditable = { ...edited };
-      cloneEditable[orderBy] = value;
-      setEdited(cloneEditable);
-    }
-  };
+  // const handleChange = (value: string | number | (string | number)[], orderBy: keyof T): void => {
+  //   if (edited) {
+  //     const cloneEditable = { ...edited };
+  //     cloneEditable[orderBy] = value;
+  //     setEdited(cloneEditable);
+  //   }
+  // };
 
   const startEdit = (item: T): (() => void) => {
     return () => setEdited(item);
@@ -255,8 +265,10 @@ const TableDictionary = <T extends AnyObjectWithId>({
                     getCollapseElement={getCollapseElement}
                     isEdit={isEditField}
                     item={item}
-                    handleChangeFieldInRow={handleChange}
+                    // handleChangeFieldInRow={handleChange}
                     countColumns={countColumns}
+                    edit={edited}
+                    onChangeEdit={setEdited}
                   />
                 );
               })}

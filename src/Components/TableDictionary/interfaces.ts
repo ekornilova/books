@@ -6,24 +6,9 @@ export interface TableHeadData<K> extends DataH<K> {
   align: Alignment;
 }
 
-// export type AnyObjectWithId = {
-//   id?: string | number;
-//   [key: string]: any;
-// };
-// export type FieldType = 'input' | 'select';
-// export interface OptionI {
-//   id: string | number;
-//   value?: string | number;
-// }
-// export interface FieldI<T extends AnyObjectWithId> {
-//   type?: FieldType;
-//   options?: OptionI[];
-//   defaultValue?: string | number;
-//   name: keyof T;
-// }
 export interface RowTableProps<T extends AnyObjectWithId> {
   isEdit?: boolean;
-  handleChangeFieldInRow: (value: string | number | (string | number)[], name: keyof T) => void;
+  // handleChangeFieldInRow: (value: string | number | (string | number)[], name: keyof T) => void;
   item: T;
   fieldSettings: FieldI<T>[];
   handleSaveRow: () => void;
@@ -34,6 +19,8 @@ export interface RowTableProps<T extends AnyObjectWithId> {
   getCollapseElement?: (item: T) => ReactElement;
   isDisabled?: boolean;
   countColumns: number;
+  edit: T;
+  onChangeEdit: any;
 }
 export interface TableDictionaryProps<T extends AnyObjectWithId> {
   bodyList: T[];
