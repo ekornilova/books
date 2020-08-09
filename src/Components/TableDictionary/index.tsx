@@ -31,6 +31,7 @@ import { EditField } from '../Form';
 interface StyledTableRowProps extends TableRowProps {
   isDisabled?: boolean;
   isCollapsed?: boolean;
+  isEdited?: boolean;
 }
 const StyledTableWrapper = styled.div<{ height?: number }>`
   height: ${({ height }) => height || '50'}px;
@@ -43,7 +44,17 @@ const StyledTableWrapper = styled.div<{ height?: number }>`
     bottom: 0;
   }
 `;
-const StyledTableRow = styled(({ isDisabled, isCollapsed, ...props }) => <TableRow {...props} />)`
+const StyledTableRow = styled(({ isDisabled, isCollapsed, isEdited, ...props }) => (
+  <TableRow {...props} />
+))`
+  ${(p: StyledTableRowProps) =>
+    p.isEdited &&
+    `
+  height: 190px;
+  td {
+    height: 100%;
+  }
+  `}
   pointer-events: ${(p: StyledTableRowProps) => p.isDisabled && 'none'};
   opacity: ${(p: StyledTableRowProps) => p.isDisabled && '.2'};
   ${(p: StyledTableRowProps) =>
@@ -65,7 +76,7 @@ const StTable = styled(Table)`
   position: relative;
 `;
 const AddButton = styled(Button)`
-  margin: 10px;
+  margin: 10px !important;
 `;
 const getList = <T extends unknown>(bodyList: T[]): T[] => {
   const clonedBodyList: T[] = [...bodyList];
@@ -91,9 +102,21 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
   onChangeEdit,
 }: RowTableProps<T>) => {
   const [open, setOpen] = React.useState<boolean>(false);
+  const isValidRow =
+    isEdit && edit
+      ? fieldSettings.every(({ name, isNotValid }) => {
+          return isNotValid ? !isNotValid(edit[name]) : true;
+        })
+      : true;
   return (
     <>
-      <StyledTableRow isCollapsed={isCollapsed} hover={!open} tabIndex={-1} isDisabled={isDisabled}>
+      <StyledTableRow
+        isEdited={isEdited}
+        isCollapsed={isCollapsed}
+        hover={!open}
+        tabIndex={-1}
+        isDisabled={isDisabled}
+      >
         {isCollapsed && (
           <TableCell>
             <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -116,9 +139,11 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
           <StyledTableCell>
             {isEdit ? (
               <>
-                <IconButton onClick={handleSaveRow}>
-                  <SaveRounded color="primary" />
-                </IconButton>
+                {isValidRow && (
+                  <IconButton onClick={handleSaveRow}>
+                    <SaveRounded color="primary" />
+                  </IconButton>
+                )}
                 <IconButton onClick={handleCancelEditRow}>
                   <CancelRounded color="error" />
                 </IconButton>
@@ -224,17 +249,15 @@ const TableDictionary = <T extends AnyObjectWithId>({
     setEdited(null);
   };
   const ariaLabel = isCollapsed ? 'collapsible table' : 'sticky table';
+  const tableHeight = ((currentList.length || edited) && height) || 0;
   return (
-    <StyledTableWrapper
-      className={className}
-      height={((currentList.length || edited) && height) || 0}
-    >
+    <StyledTableWrapper className={className} height={tableHeight}>
       <Paper>
         <TableWrapper>
           <ScrollBar>
             <StTable stickyHeader aria-label={ariaLabel}>
               <TableHead>
-                <StyledTableRow isDisabled={edited !== null}>
+                <StyledTableRow>
                   {isCollapsed && <TableCell />}
                   {headList.map((column) => (
                     <TableCell align={column.align} key={column.id as string}>

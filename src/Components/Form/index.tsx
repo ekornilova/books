@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FieldI, AnyObjectWithId } from '../../additional';
-import { Select, Input } from '../BasicElements';
+import { Select, Input, TextComponent } from '../BasicElements';
 
 const Wrapper = styled.div``;
 
@@ -9,16 +9,22 @@ interface FormI<T extends AnyObjectWithId> {
   fieldSettings: FieldI<T>[];
   value: T;
   onChange: any;
-  //  (newValue: T) => void;
 }
 interface EditFieldI<T extends AnyObjectWithId> {
   fieldSetting: FieldI<T>;
   value: T;
-  onChange?: any;
+  onChange: any;
 }
 export const StInput = styled((props) => <Input {...props} />)`
   padding-top: 10px;
   flex-grow: 1;
+`;
+export const EditFieldWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  justify-items: flex-start;
 `;
 export const EditField = <T extends AnyObjectWithId>({
   fieldSetting,
@@ -39,30 +45,41 @@ export const EditField = <T extends AnyObjectWithId>({
       return newVals;
     });
   };
+  const currentValue = value[fieldSetting.name];
+  const errorMessage = fieldSetting.isNotValid ? fieldSetting.isNotValid(currentValue) : '';
+  let ComponentField = null;
   switch (fieldSetting.type) {
     case 'select': {
-      return (
+      ComponentField = (
         <Select
           onChange={handleChangeValue(fieldSetting.name as string)}
           forForm
           labelText={fieldSetting.label}
-          value={value[fieldSetting.name]}
+          value={currentValue}
           values={fieldSetting.options || []}
         />
       );
+      break;
     }
     default: {
-      return (
+      ComponentField = (
         <StInput
           labelText={fieldSetting.label}
           forForm
           isInput
           onChange={handleChangeValue(fieldSetting.name as string)}
-          value={value[fieldSetting.name] || ''}
+          value={currentValue || ''}
         />
       );
+      break;
     }
   }
+  return (
+    <EditFieldWrapper>
+      {ComponentField}
+      {errorMessage && <TextComponent color="secondary" text={errorMessage} />}
+    </EditFieldWrapper>
+  );
 };
 const StyledRowItem = styled.div`
   > * {

@@ -29,15 +29,9 @@ import FilterForm, {
   FilterSettingsI,
 } from './FilterForm';
 
-// height: ${({ height }) => height || '50'}px;
-// position: relative;
-// > * {
-//   position: absolute;
-//   top: 0;
-//   right: 0;
-//   left: 0;
-//   bottom: 0;
-// }
+const StyledBox = styled(Box)`
+  padding-bottom: 40px;
+`;
 const StyledTableDictionary = styled(TableDictionary)<{ isInner?: boolean; height?: number }>`
   ${({ isInner }) =>
     isInner
@@ -98,9 +92,8 @@ const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (
         }
       : {};
   return (
-    <Box margin={1}>
+    <StyledBox margin={1}>
       <TextComponent text="Shop Data" gutterBottom />
-      {/* <StyledCustomTableWrapper isInner height={list.length ? 150 : 50}> */}
       <StyledTableDictionary
         isInner
         height={150}
@@ -110,8 +103,7 @@ const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (
         fieldSettings={getFieldSettingsInnerTable(dictionaries)}
         {...additionalProps}
       />
-      {/* </StyledCustomTableWrapper> */}
-    </Box>
+    </StyledBox>
   );
 };
 
@@ -122,7 +114,7 @@ const BooksPage: FC<{
 }> = ({ dictionaries, books, setBooks }) => {
   const [filterBooks, setFilterBooks] = useState<BookI[]>(books);
   const [filterValues, setFilterValues] = useState<FilterSettingsI>(defaultFilterSettings);
-  const { handleAxiosError } = useNotifications();
+  const { handleAxiosError, handleAxiosSuccess } = useNotifications();
   const getBooksFromServer = (items?: BookI[]) => {
     getBooks(items || booksMock)
       .then((newBooks: BookI[]) => {
@@ -153,6 +145,7 @@ const BooksPage: FC<{
     actionRequest()
       .then(() => {
         const newBooks = [...books];
+        let message = `Book "${bookForAction.name}"`;
         switch (action) {
           case 'add': {
             const newBook = {
@@ -160,15 +153,19 @@ const BooksPage: FC<{
               id: shortId.generate(),
             };
             newBooks.push(newBook);
+            message = `${message} created!`;
             break;
           }
           case 'edit':
             newBooks.splice(findIdx, 1, bookForAction);
+            message = `${message} edited!`;
             break;
           default:
             newBooks.splice(findIdx, 1);
+            message = `${message} deleted!`;
             break;
         }
+        handleAxiosSuccess(message);
         getBooksFromServer(newBooks);
       })
       .catch(handleAxiosError);
@@ -180,7 +177,6 @@ const BooksPage: FC<{
         setValue={setFilterValues}
         fieldSettings={getFilterFieldSettings(dictionaryOptions)}
       />
-      {/* <StyledCustomTableWrapper height={filterBooks.length ? 500 : 70}> */}
       <StyledTableDictionary
         height={500}
         sortList={sortSettings}
@@ -196,7 +192,6 @@ const BooksPage: FC<{
         defaultItem={defaultBook}
         onAddRow={onActionBook('add')}
       />
-      {/* </StyledCustomTableWrapper> */}
     </>
   );
 };

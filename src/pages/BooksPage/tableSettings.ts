@@ -2,7 +2,7 @@ import { sortableFn } from '../../additional/Sorter/helper';
 import { BookI } from '../../utils/book';
 import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
 import { Alignment, Order, FieldI, OptionI } from '../../additional';
-import { onlyNumberField } from './helpers';
+import { onlyNumberField, isNotNumberValid, isNotEmptyValid } from './helpers';
 
 export const defaultBook = {
   name: '',
@@ -81,6 +81,7 @@ export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI
   return [
     {
       name: 'name',
+      isNotValid: isNotEmptyValid,
     },
     {
       name: 'description',
@@ -89,14 +90,17 @@ export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI
       type: 'select',
       name: 'author',
       options: dictionaries ? dictionaries.authors : [],
+      isNotValid: isNotEmptyValid,
     },
     {
       type: 'select',
       name: 'genres',
       options: dictionaries ? dictionaries.genres : [],
+      isNotValid: isNotEmptyValid,
     },
     {
       name: 'isbn',
+      isNotValid: isNotEmptyValid,
     },
     {
       name: 'coverImage',
@@ -121,10 +125,15 @@ export const getFieldSettingsInnerTable = (
       type: 'select',
       name: 'shopId',
       options: dictionaries ? dictionaries.shops : [],
+      isNotValid: isNotEmptyValid,
     },
     {
       name: 'rests',
       onChangeValue: onlyNumberField,
+      isNotValid: isNotNumberValid,
+      // (value: number | string) => {
+      //   return value > 0 ? '' : 'Count should be more than zero'
+      // }
     },
   ];
 };

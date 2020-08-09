@@ -31,7 +31,7 @@ export interface FieldI<T extends AnyObjectWithId> {
   defaultValue?: string | number;
   name: keyof T;
   label?: string;
-  isValid?: (val: string | number) => boolean;
+  isNotValid?: (val: string | number) => string;
   onChangeValue?: (val: string | number) => string | number;
   isNotEdit?: boolean;
 }
