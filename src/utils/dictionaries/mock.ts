@@ -1,4 +1,4 @@
-import { AuthorI, GenreI, ShopI } from './interface';
+import { AuthorI, GenreI, ShopI, QuantityShopInfoI } from './interface';
 import { BookI } from '../book';
 
 export const authorsMock: AuthorI[] = [
@@ -134,13 +134,40 @@ export const genresMock: GenreI[] = [
     name: 'Poem',
   },
 ];
+const getQuantityShopInfo = (bookId: number | string): QuantityShopInfoI[] => [
+  {
+    bookId,
+    shopId: 1,
+    rests: 4,
+  },
+  {
+    bookId,
+    shopId: 2,
+    rests: 43,
+  },
+  {
+    bookId,
+    shopId: 3,
+    rests: 54,
+  },
+  {
+    bookId,
+    shopId: 4,
+    rests: 24,
+  },
+  {
+    bookId,
+    shopId: 5,
+    rests: 41,
+  },
+];
 export const booksMock: BookI[] = [
   {
     id: 1,
     genres: [3],
     author: 4,
     name: 'Ruslan i Ludmila',
-    quantityShopInfo: [],
+    quantityShopInfo: getQuantityShopInfo(1),
     isbn: '123456',
   },
   {
@@ -148,7 +175,7 @@ export const booksMock: BookI[] = [
     genres: [3],
     author: 4,
     name: 'Kavkazskiy plennik',
-    quantityShopInfo: [],
+    quantityShopInfo: getQuantityShopInfo(2),
     isbn: '1234566',
   },
   {
@@ -156,7 +183,7 @@ export const booksMock: BookI[] = [
     genres: [3],
     author: 4,
     name: 'Gavriiliada',
-    quantityShopInfo: [],
+    quantityShopInfo: getQuantityShopInfo(3),
     isbn: '1234567',
   },
   {

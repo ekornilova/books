@@ -1,6 +1,7 @@
 import { sortableFn } from '../../additional/Sorter/helper';
 import { DictionaryI } from '../../store/types';
 import { BookI } from '../../utils/book';
+import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
 import { FieldI } from '../../Components/TableDictionary/interfaces';
 import { Alignment, Order } from '../../additional';
 
@@ -107,3 +108,37 @@ export const getFieldSettings = (dictionaries: DictionaryI | null): FieldI<BookI
     },
   ];
 };
+export const getFieldSettingsInnerTable = (
+  dictionaries: DictionaryI | null,
+): FieldI<QuantityShopInfoI>[] => {
+  return [
+    {
+      type: 'select',
+      name: 'shopId',
+      options: dictionaries
+        ? dictionaries.shops.map(({ id, name }) => {
+            return {
+              id,
+              value: name,
+            };
+          })
+        : [],
+    },
+    {
+      name: 'rests',
+    },
+  ];
+};
+export const headerSettingsInnerTable = [
+  {
+    field: 'Shop Name',
+    id: 'shopId',
+    align: 'left' as Alignment,
+  },
+  {
+    field: 'Count',
+    id: 'rests',
+    align: 'left' as Alignment,
+  },
+];
+export const sortSettingsInnerTable = [];

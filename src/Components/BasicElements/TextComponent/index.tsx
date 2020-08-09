@@ -13,9 +13,10 @@ const TextComponent: FC<{
     | 'textSecondary'
     | 'error'
     | undefined;
-}> = ({ text, className, color }) => {
+  [key: string]: any;
+}> = ({ text, className, color, ...rest }) => {
   return (
-    <Typography className={className} color={color}>
+    <Typography className={className} color={color} {...rest}>
       {text}
     </Typography>
   );

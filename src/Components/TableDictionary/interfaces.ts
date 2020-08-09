@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { Alignment } from '../../additional';
 import { DataH, SortEl } from '../../additional/Sorter/interfaces';
 
@@ -9,6 +10,20 @@ export type AnyObjectWithId = {
   id?: string | number;
   [key: string]: any;
 };
+export interface RowTableProps<T extends AnyObjectWithId> {
+  isEdit?: boolean;
+  handleChangeFieldInRow: (value: string | number | (string | number)[], name: keyof T) => void;
+  item: T;
+  fieldSettings: FieldI<T>[];
+  handleSaveRow: () => void;
+  handleDeleteRow?: () => void;
+  handleStartEditRow?: () => void;
+  handleCancelEditRow: () => void;
+  isCollapsed?: boolean;
+  getCollapseElement?: (item: T) => ReactElement;
+  isDisabled?: boolean;
+  countColumns: number;
+}
 export interface TableDictionaryProps<T extends AnyObjectWithId> {
   bodyList: T[];
   fieldSettings: FieldI<T>[];
@@ -18,6 +33,8 @@ export interface TableDictionaryProps<T extends AnyObjectWithId> {
   sortList: SortEl<T>[];
   className?: string;
   deleteConfirmText?: string;
+  isCollapsed?: boolean;
+  getCollapseElement?: (item: T) => ReactElement;
 }
 export type FieldType = 'input' | 'select';
 export interface OptionI {
