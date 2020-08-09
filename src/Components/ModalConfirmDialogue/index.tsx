@@ -36,7 +36,9 @@ export const ModalConfirmDialogue: FC<ModalConfirmDialogueI> = ({
     <ModalWindow open={open} closeHandler={closeHandler} headerName={headerName} {...rest}>
       {modalText && <StyledDialogContent>{modalText}</StyledDialogContent>}
       <StyledDialogActions>
-        <Button onClick={onRejectButtonClick}>{rejectButtonLabel}</Button>
+        <Button color="secondary" onClick={onRejectButtonClick}>
+          {rejectButtonLabel}
+        </Button>
         <Button onClick={onAcceptButtonClick}>{acceptButtonLabel}</Button>
       </StyledDialogActions>
     </ModalWindow>

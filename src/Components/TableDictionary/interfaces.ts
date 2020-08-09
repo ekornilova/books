@@ -8,7 +8,6 @@ export interface TableHeadData<K> extends DataH<K> {
 
 export interface RowTableProps<T extends AnyObjectWithId> {
   isEdit?: boolean;
-  // handleChangeFieldInRow: (value: string | number | (string | number)[], name: keyof T) => void;
   item: T;
   fieldSettings: FieldI<T>[];
   handleSaveRow: () => void;
@@ -16,10 +15,15 @@ export interface RowTableProps<T extends AnyObjectWithId> {
   handleStartEditRow?: () => void;
   handleCancelEditRow: () => void;
   isCollapsed?: boolean;
-  getCollapseElement?: (item: T, isEdit?: boolean, edited?: T, onChange?: any) => ReactElement;
+  getCollapseElement?: (
+    item: T,
+    isEdit?: boolean,
+    edited?: T | null,
+    onChange?: any,
+  ) => ReactElement;
   isDisabled?: boolean;
   countColumns: number;
-  edit: T;
+  edit: T | null;
   onChangeEdit: any;
 }
 export interface TableDictionaryProps<T extends AnyObjectWithId> {
@@ -27,10 +31,14 @@ export interface TableDictionaryProps<T extends AnyObjectWithId> {
   fieldSettings: FieldI<T>[];
   onEditRow?: (row: T) => void;
   onDeleteRow?: (row: T) => void;
+  onAddRow?: (row: T) => void;
   headList: TableHeadData<T>[];
   sortList: SortEl<T>[];
   className?: string;
   deleteConfirmText?: string;
   isCollapsed?: boolean;
   getCollapseElement?: (item: T) => ReactElement;
+  addButtonText?: string;
+  defaultItem?: T;
+  height?: number;
 }

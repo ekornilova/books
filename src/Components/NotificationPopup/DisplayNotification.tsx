@@ -129,6 +129,7 @@ const ConfirmNotificationView: FC<{
     <ModalConfirmDialogue
       open
       {...notificationContent}
+      height={115}
       closeHandler={onCloseHandler}
       onReject={onCloseHandler}
     />

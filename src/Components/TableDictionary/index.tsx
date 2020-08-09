@@ -24,7 +24,7 @@ import { AnyObjectWithId } from '../../additional';
 import { TableDictionaryProps, RowTableProps } from './interfaces';
 import TableCellField from './TableCellField';
 import { SortEl } from '../../additional/Sorter/interfaces';
-import { ScrollBar } from '../BasicElements';
+import { ScrollBar, Button } from '../BasicElements';
 import { useNotifications } from '../NotificationPopup/ProviderNotification';
 import { EditField } from '../Form';
 
@@ -32,7 +32,17 @@ interface StyledTableRowProps extends TableRowProps {
   isDisabled?: boolean;
   isCollapsed?: boolean;
 }
-
+const StyledTableWrapper = styled.div<{ height?: number }>`
+  height: ${({ height }) => height || '50'}px;
+  position: relative;
+  > * {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+  }
+`;
 const StyledTableRow = styled(({ isDisabled, isCollapsed, ...props }) => <TableRow {...props} />)`
   pointer-events: ${(p: StyledTableRowProps) => p.isDisabled && 'none'};
   opacity: ${(p: StyledTableRowProps) => p.isDisabled && '.2'};
@@ -54,11 +64,14 @@ const TableWrapper = styled.div`
 const StTable = styled(Table)`
   position: relative;
 `;
+const AddButton = styled(Button)`
+  margin: 10px;
+`;
 const getList = <T extends unknown>(bodyList: T[]): T[] => {
   const clonedBodyList: T[] = [...bodyList];
   return clonedBodyList;
 };
-
+export const ID_NEW_ITEM = 'new';
 const isEdited = <T extends AnyObjectWithId>(edited: T | null, item: T): boolean => {
   return edited !== null && edited.id === item.id;
 };
@@ -67,7 +80,6 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
   isEdit,
   getCollapseElement,
   handleCancelEditRow,
-  // handleChangeFieldInRow,
   handleDeleteRow,
   handleStartEditRow,
   handleSaveRow,
@@ -89,48 +101,17 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
             </IconButton>
           </TableCell>
         )}
-        {/* {isEdit ? (
-          <>
-            <TableCell>
-              <TextField
-                value={item.name}
-                onChange={(e) => handleChangeFieldInRow(e.target.value, 'name')}
-              />
-            </TableCell>
-            <TableCell>
-              <TextField
-                value={item.city}
-                onChange={(e) => handleChangeFieldInRow(e.target.value, 'city')}
-              />
-            </TableCell>
-            <TableCell>
-              <TextField
-                value={item.address}
-                onChange={(e) => handleChangeFieldInRow(e.target.value, 'address')}
-              />
-            </TableCell>
-            <TableCell>
-              <TextField
-                value={item.phone}
-                onChange={(e) => handleChangeFieldInRow(e.target.value, 'phone')}
-              />
-            </TableCell>
-          </>
-        ) : (
-          <> */}
         {fieldSettings.map((fieldSetting) => {
           return isEdit ? (
             <TableCell>
               {!fieldSetting.isNotEdit && (
-                <EditField value={edit} fieldSetting={fieldSetting} onChange={onChangeEdit} />
+                <EditField value={edit as T} fieldSetting={fieldSetting} onChange={onChangeEdit} />
               )}
             </TableCell>
           ) : (
             <TableCellField {...fieldSetting} value={item[fieldSetting.name]} />
           );
         })}
-        {/* </>
-        )} */}
         {!!(handleDeleteRow || handleStartEditRow) && (
           <StyledTableCell>
             {isEdit ? (
@@ -174,10 +155,14 @@ const TableDictionary = <T extends AnyObjectWithId>({
   onDeleteRow,
   sortList,
   fieldSettings,
-  className,
   deleteConfirmText,
   isCollapsed,
   getCollapseElement,
+  onAddRow,
+  addButtonText,
+  defaultItem,
+  className,
+  height = 50,
 }: TableDictionaryProps<T>) => {
   const { showDialogue } = useNotifications();
   const [sortables, setSortables] = React.useState<SortEl<T>[]>(sortList);
@@ -202,9 +187,6 @@ const TableDictionary = <T extends AnyObjectWithId>({
         showDialogue({
           onAccept: () => {
             tryToDelete();
-            // if (onDeleteRow) {
-            //   onDeleteRow(item);
-            // }
           },
           modalText: deleteConfirmText || '',
         });
@@ -213,80 +195,108 @@ const TableDictionary = <T extends AnyObjectWithId>({
       }
     };
   };
-  // const handleChange = (value: string | number | (string | number)[], orderBy: keyof T): void => {
-  //   if (edited) {
-  //     const cloneEditable = { ...edited };
-  //     cloneEditable[orderBy] = value;
-  //     setEdited(cloneEditable);
-  //   }
-  // };
 
   const startEdit = (item: T): (() => void) => {
     return () => setEdited(item);
   };
 
   const saveData = (): void => {
-    if (!edited && !onEditRow) {
+    const saveFunction = edited && edited.id === ID_NEW_ITEM ? onAddRow : onEditRow;
+    if (!edited && !saveFunction) {
       return;
     }
-    if (onEditRow) {
-      onEditRow(edited as T);
+    if (saveFunction) {
+      saveFunction(edited as T);
     }
     setEdited(null);
   };
 
+  const startAdd = () => {
+    if (defaultItem) {
+      const newItem = {
+        ...defaultItem,
+        id: ID_NEW_ITEM,
+      };
+      setEdited(newItem);
+    }
+  };
   const cancellationData = (): void => {
     setEdited(null);
   };
   const ariaLabel = isCollapsed ? 'collapsible table' : 'sticky table';
   return (
-    <Paper className={className}>
-      <TableWrapper>
-        <ScrollBar>
-          <StTable stickyHeader aria-label={ariaLabel}>
-            <TableHead>
-              <StyledTableRow isDisabled={edited !== null}>
-                {isCollapsed && <TableCell />}
-                {headList.map((column) => (
-                  <TableCell align={column.align} key={column.id as string}>
-                    {showSortable({ column, sortables, onSortHandler })}
-                  </TableCell>
-                ))}
-                {!!(onDeleteRow || onEditRow) && <TableCell />}
-              </StyledTableRow>
-            </TableHead>
-            <TableBody>
-              {stableSort(currentList, sortables).map((column) => {
-                let item: T = column;
-                const isEditField = isEdited(edited, column);
-                if (edited && column.id === edited.id) {
-                  item = edited;
-                }
-                const isDisabled = edited !== null && edited.id !== item.id;
-                return (
+    <StyledTableWrapper
+      className={className}
+      height={((currentList.length || edited) && height) || 0}
+    >
+      <Paper>
+        <TableWrapper>
+          <ScrollBar>
+            <StTable stickyHeader aria-label={ariaLabel}>
+              <TableHead>
+                <StyledTableRow isDisabled={edited !== null}>
+                  {isCollapsed && <TableCell />}
+                  {headList.map((column) => (
+                    <TableCell align={column.align} key={column.id as string}>
+                      {showSortable({ column, sortables, onSortHandler })}
+                    </TableCell>
+                  ))}
+                  {!!(onDeleteRow || onEditRow) && <TableCell />}
+                </StyledTableRow>
+              </TableHead>
+              <TableBody>
+                {stableSort(currentList, sortables).map((column) => {
+                  let item: T = column;
+                  const isEditField = isEdited(edited, column);
+                  if (edited && column.id === edited.id) {
+                    item = edited;
+                  }
+                  const isDisabled = edited !== null && edited.id !== item.id;
+                  return (
+                    <TableRowDictionary
+                      handleCancelEditRow={cancellationData}
+                      handleSaveRow={saveData}
+                      handleStartEditRow={onEditRow && startEdit(item)}
+                      fieldSettings={fieldSettings}
+                      handleDeleteRow={onDeleteRow && onHandleRemove(item)}
+                      isDisabled={isDisabled}
+                      isCollapsed={isCollapsed}
+                      getCollapseElement={getCollapseElement}
+                      isEdit={isEditField}
+                      item={item}
+                      countColumns={countColumns}
+                      edit={edited}
+                      onChangeEdit={setEdited}
+                    />
+                  );
+                })}
+                {edited && edited.id === ID_NEW_ITEM && (
                   <TableRowDictionary
                     handleCancelEditRow={cancellationData}
                     handleSaveRow={saveData}
-                    handleStartEditRow={onEditRow && startEdit(item)}
+                    handleStartEditRow={onEditRow && startEdit(edited)}
                     fieldSettings={fieldSettings}
-                    handleDeleteRow={onDeleteRow && onHandleRemove(item)}
-                    isDisabled={isDisabled}
+                    handleDeleteRow={onDeleteRow && onHandleRemove(edited)}
                     isCollapsed={isCollapsed}
                     getCollapseElement={getCollapseElement}
-                    isEdit={isEditField}
-                    item={item}
-                    // handleChangeFieldInRow={handleChange}
+                    isEdit
+                    item={edited}
                     countColumns={countColumns}
                     edit={edited}
                     onChangeEdit={setEdited}
                   />
-                );
-              })}
-            </TableBody>
-          </StTable>
-        </ScrollBar>
-      </TableWrapper>
-    </Paper>
+                )}
+              </TableBody>
+            </StTable>
+          </ScrollBar>
+        </TableWrapper>
+        {onAddRow && !edited && (
+          <AddButton color="secondary" onClick={startAdd}>
+            {addButtonText || '+ add row'}
+          </AddButton>
+        )}
+      </Paper>
+    </StyledTableWrapper>
   );
 };
 

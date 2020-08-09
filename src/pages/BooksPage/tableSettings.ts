@@ -4,6 +4,19 @@ import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
 import { Alignment, Order, FieldI, OptionI } from '../../additional';
 import { onlyNumberField } from './helpers';
 
+export const defaultBook = {
+  name: '',
+  isbn: '',
+  author: '',
+  genres: [],
+  quantityShopInfo: [],
+  description: '',
+};
+export const defaultQuantityShopInfo: QuantityShopInfoI = {
+  shopId: '',
+  rests: 0,
+  bookId: '',
+};
 export const sortSettings = [
   {
     order: 'desc' as Order,

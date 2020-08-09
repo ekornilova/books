@@ -5,6 +5,7 @@ export interface ShopI {
 }
 
 export interface QuantityShopInfoI {
+  id?: string | number;
   shopId: string | number;
   bookId: string | number;
   rests: number;
