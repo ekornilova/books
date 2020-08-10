@@ -12,6 +12,9 @@ const StPreviewImg = styled(RemoveRedEyeRounded)`
     fill: #eb5757;
   }
 `;
+const StTableCell = styled(TableCell)<{ onClick?: any }>`
+  ${({ onClick }) => onClick && 'cursor: pointer;'}
+`;
 interface TableCellFieldI<T extends AnyObjectWithId> extends FieldI<T> {
   value: string | number | (string | number)[];
 }
@@ -20,8 +23,10 @@ const TableCellField = <T extends AnyObjectWithId>({
   options = [],
   value,
   onImageClick,
+  onCellClick,
 }: TableCellFieldI<T> & {
   onImageClick?: (src: string) => void;
+  onCellClick?: () => void;
 }) => {
   const onHandleImageClick = () => {
     if (onImageClick && value) {
@@ -40,13 +45,13 @@ const TableCellField = <T extends AnyObjectWithId>({
           return result;
         }, [])
         .join(' , ');
-      return <TableCell>{stringValue}</TableCell>;
+      return <StTableCell onClick={onCellClick}>{stringValue}</StTableCell>;
     }
     case 'image': {
       return <TableCell>{value && <StPreviewImg onClick={onHandleImageClick} />}</TableCell>;
     }
     default:
-      return <TableCell>{value as string}</TableCell>;
+      return <StTableCell onClick={onCellClick}>{value as string}</StTableCell>;
   }
 };
 export default TableCellField;

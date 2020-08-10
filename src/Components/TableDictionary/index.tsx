@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   CancelRounded,
   DeleteRounded,
@@ -135,7 +135,7 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
           </TableCell>
         )}
         {fieldSettings.map((fieldSetting) => {
-          return isEdit ? (
+          return isEdit && !!(handleDeleteRow || handleStartEditRow) ? (
             <TableCell>
               {!fieldSetting.isNotEdit && (
                 <EditField value={edit as T} fieldSetting={fieldSetting} onChange={onChangeEdit} />
@@ -146,6 +146,7 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
               {...fieldSetting}
               value={item[fieldSetting.name]}
               onImageClick={onImageClick}
+              onCellClick={handleStartEditRow}
             />
           );
         })}
@@ -202,6 +203,7 @@ const TableDictionary = <T extends AnyObjectWithId>({
   defaultItem,
   className,
   height = 50,
+  isInner,
 }: TableDictionaryProps<T>) => {
   const scrollRef = useRef(null);
   const { showDialogue } = useNotifications();
@@ -209,6 +211,56 @@ const TableDictionary = <T extends AnyObjectWithId>({
   const [edited, setEdited] = React.useState<T | null>(null);
   const [imageSrc, setImageSrc] = React.useState<string>('');
   const currentList: T[] = getList(bodyList);
+  const cancellationData = (): void => {
+    setEdited(null);
+  };
+  const saveData = (): void => {
+    const saveFunction = edited && edited.id === ID_NEW_ITEM ? onAddRow : onEditRow;
+    if (!edited && !saveFunction) {
+      return;
+    }
+    if (saveFunction) {
+      saveFunction(edited as T);
+    }
+    setEdited(null);
+  };
+  const handleKeyboardPush = (e: KeyboardEvent) => {
+    const stop = () => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    };
+    if (edited) {
+      const key = e.which || e.keyCode || 0;
+      if (key === 27) {
+        stop();
+        cancellationData();
+      }
+      if (key === 13) {
+        stop();
+        const isDataValid = fieldSettings.every(({ name, isNotValid }) => {
+          return isNotValid ? !isNotValid(edited[name]) : true;
+        });
+        if (isDataValid) {
+          saveData();
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!isInner) {
+      window.addEventListener('keydown', handleKeyboardPush);
+    }
+    return () => {
+      if (!isInner) {
+        window.removeEventListener('keydown', handleKeyboardPush);
+      }
+    };
+  }, [edited, isInner]);
+  useEffect(() => {
+    cancellationData();
+  }, [bodyList]);
   const countColumns =
     fieldSettings.length + (isCollapsed ? 1 : 0) + (onDeleteRow || onEditRow ? 1 : 0);
   const onSortHandler = (sortable: SortEl<T>): ((event: React.MouseEvent<unknown>) => void) => {
@@ -241,17 +293,6 @@ const TableDictionary = <T extends AnyObjectWithId>({
     return () => setEdited(item);
   };
 
-  const saveData = (): void => {
-    const saveFunction = edited && edited.id === ID_NEW_ITEM ? onAddRow : onEditRow;
-    if (!edited && !saveFunction) {
-      return;
-    }
-    if (saveFunction) {
-      saveFunction(edited as T);
-    }
-    setEdited(null);
-  };
-
   const startAdd = () => {
     if (defaultItem) {
       const newItem = {
@@ -266,9 +307,7 @@ const TableDictionary = <T extends AnyObjectWithId>({
       }, 300);
     }
   };
-  const cancellationData = (): void => {
-    setEdited(null);
-  };
+
   const onOpenImageWindow = (src: string) => {
     setImageSrc(src);
   };

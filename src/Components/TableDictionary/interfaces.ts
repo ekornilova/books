@@ -42,4 +42,5 @@ export interface TableDictionaryProps<T extends AnyObjectWithId> {
   addButtonText?: string;
   defaultItem?: T;
   height?: number;
+  isInner?: boolean;
 }
