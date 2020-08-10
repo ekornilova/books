@@ -1,7 +1,7 @@
 {
-  "name": "routes",
+  "name": "books",
   "version": "0.1.0",
-  "description": "Routes",
+  "description": "Books",
   "main": "index.tsx",
   "dependencies": {
     "@babel/runtime": "^7.9.6",
@@ -86,7 +86,6 @@
   },
   "scripts": {
     "bundle": "webpack",
-    "test": "jest",
     "start": "webpack-dev-server --port=8086 --history-api-fallback",
     "build": "webpack --mode production",
     "lint": "eslint src/ --ext .ts,.tsx",
