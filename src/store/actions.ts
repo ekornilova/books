@@ -19,8 +19,3 @@ export const setBooks = (data: BookI[]): SetBooks => ({
   type: constants.SETBOOKS,
   data,
 });
-// export function authenticate(u: string, pw: string): Authenticate ({
-//    type: constants.AUTHENTICATE,
-//    username: u,
-//    pw: pw
-// });
