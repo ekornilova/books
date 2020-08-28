@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Form from '../../Components/Form';
 import { DictionaryOptionI } from './tableSettings';
-import { FieldI } from '../../additional';
+import { FieldI, FieldType, AnyObject } from '../../additional';
 import { onlyNumberField } from './helpers';
 import { Button } from '../../Components/BasicElements';
 
@@ -14,20 +14,25 @@ export const defaultFilterSettings = {
 };
 export const getFilterFieldSettings = (
   dictionaries: DictionaryOptionI | null,
-): FieldI<FilterSettingsI>[] => {
+): FieldI<
+  Pick<
+    FilterSettingsI,
+    'name' | 'author' | 'genres' | 'isbn' | 'commonCount_from' | 'commonCount_to'
+  >
+>[] => {
   return [
     {
       name: 'name',
       label: 'Book Name',
     },
     {
-      type: 'select',
+      type: FieldType.Select,
       label: 'Author Name',
       name: 'author',
       options: dictionaries ? dictionaries.authors : [],
     },
     {
-      type: 'select',
+      type: FieldType.Select,
       label: 'Genres',
       name: 'genres',
       options: dictionaries ? dictionaries.genres : [],
@@ -57,10 +62,10 @@ export interface FilterSettingsI {
   commonCount_from?: number;
   commonCount_to?: number;
 }
-interface FilterFormI {
-  value: FilterSettingsI;
+interface FilterFormI<T extends AnyObject> {
+  value: T;
   setValue: any;
-  fieldSettings: FieldI<FilterSettingsI>[];
+  fieldSettings: FieldI<T>[];
 }
 const FilterFormWrapper = styled.div`
   margin-top: 20px;
@@ -86,7 +91,12 @@ const StForm = styled(Form)`
     align-items: center;
   }
 `;
-const FilterForm: FC<FilterFormI> = ({ value, setValue, fieldSettings }) => {
+
+const FilterForm = <T extends AnyObject>({
+  value,
+  setValue,
+  fieldSettings,
+}: FilterFormI<T>): React.ReactElement => {
   const onClearFilterSettings = () => {
     setValue(defaultFilterSettings);
   };

@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FieldI, AnyObjectWithId } from '../../additional';
+import { FieldI, FieldType, AnyObject } from '../../additional';
 import { Select, Input, TextComponent } from '../BasicElements';
 
 const Wrapper = styled.div``;
 
-interface FormI<T extends AnyObjectWithId> {
+interface FormI<T extends AnyObject> {
   fieldSettings: FieldI<T>[];
   value: T;
   onChange: any;
 }
-interface EditFieldI<T extends AnyObjectWithId> {
+interface EditFieldI<T extends AnyObject> {
   fieldSetting: FieldI<T>;
   value: T;
   onChange: any;
@@ -32,11 +32,11 @@ export const StSelect = styled(Select)`
     line-height: unset;
   }
 `;
-export const EditField = <T extends AnyObjectWithId>({
+export const EditField = <T extends AnyObject>({
   fieldSetting,
   value,
   onChange,
-}: EditFieldI<T>) => {
+}: EditFieldI<T>): React.ReactElement => {
   const handleChangeValue = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist();
     onChange((oldVals: T) => {
@@ -45,7 +45,7 @@ export const EditField = <T extends AnyObjectWithId>({
       const newVals = {
         ...oldVals,
         [field]: fieldSetting.onChangeValue
-          ? fieldSetting.onChangeValue(fieldValue as string | number)
+          ? fieldSetting.onChangeValue(fieldValue as T[keyof T])
           : fieldValue,
       };
       return newVals;
@@ -55,13 +55,13 @@ export const EditField = <T extends AnyObjectWithId>({
   const errorMessage = fieldSetting.isNotValid ? fieldSetting.isNotValid(currentValue) : '';
   let ComponentField = null;
   switch (fieldSetting.type) {
-    case 'select': {
+    case FieldType.Select: {
       ComponentField = (
         <StSelect
           onChange={handleChangeValue(fieldSetting.name as string)}
           forForm
           labelText={fieldSetting.label}
-          value={currentValue}
+          value={currentValue as string}
           values={fieldSetting.options || []}
         />
       );
@@ -92,14 +92,14 @@ const StyledRowItem = styled.div`
     width: 100%;
   }
 `;
-const Form = <T extends AnyObjectWithId>({
+const Form = <T extends AnyObject>({
   fieldSettings,
   value,
   onChange,
   className,
 }: FormI<T> & {
   className?: string;
-}) => {
+}): React.ReactElement => {
   return (
     <Wrapper className={className}>
       {fieldSettings.map((fieldSetting) => {

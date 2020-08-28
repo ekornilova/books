@@ -10,7 +10,6 @@ export function toggleIcons(icons: JSX.Element[], toggler: boolean): JSX.Element
 
 export type Alignment = 'left' | 'right' | 'center' | 'justify' | 'inherit';
 
-// export type Order = 'desc' | 'asc';
 export enum Order {
   Desc = 'desc',
   Asc = 'asc',
@@ -23,18 +22,24 @@ export type AnyObjectWithId = {
   id?: string | number;
   [key: string]: any;
 };
-export type FieldType = 'input' | 'select' | 'image';
+export type AnyObject = Record<string, string | number | (string | number)[] | undefined>;
+
+export enum FieldType {
+  Input,
+  Select,
+  Image,
+}
 export interface OptionI {
   id: string | number;
   value?: string | number;
 }
-export interface FieldI<T extends AnyObjectWithId> {
+export interface FieldI<T extends AnyObject> {
   type?: FieldType;
   options?: OptionI[];
   defaultValue?: string | number;
   name: keyof T;
   label?: string;
-  isNotValid?: (val: string | number) => string;
-  onChangeValue?: (val: string | number) => string | number;
+  isNotValid?: (val: T[keyof T]) => string;
+  onChangeValue?: (val: T[keyof T]) => string | number;
   isNotEdit?: boolean;
 }

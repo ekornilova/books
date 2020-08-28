@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { TableCell } from '@material-ui/core';
 import { RemoveRedEyeRounded } from '@material-ui/icons';
-import { AnyObjectWithId, FieldI } from '../../additional';
+import { AnyObject, FieldI, FieldType } from '../../additional';
 
 const StPreviewImg = styled(RemoveRedEyeRounded)`
   cursor: pointer;
@@ -15,11 +15,11 @@ const StPreviewImg = styled(RemoveRedEyeRounded)`
 const StTableCell = styled(TableCell)<{ onClick?: any }>`
   ${({ onClick }) => onClick && 'cursor: pointer;'}
 `;
-interface TableCellFieldI<T extends AnyObjectWithId> extends FieldI<T> {
-  value: string | number | (string | number)[];
+interface TableCellFieldI<T extends AnyObject> extends FieldI<T> {
+  value: string | number | undefined | (string | number)[];
 }
-const TableCellField = <T extends AnyObjectWithId>({
-  type = 'input',
+const TableCellField = <T extends AnyObject>({
+  type = FieldType.Input,
   options = [],
   value,
   onImageClick,
@@ -27,14 +27,14 @@ const TableCellField = <T extends AnyObjectWithId>({
 }: TableCellFieldI<T> & {
   onImageClick?: (src: string) => void;
   onCellClick?: () => void;
-}) => {
+}): React.ReactElement => {
   const onHandleImageClick = () => {
     if (onImageClick && value) {
       onImageClick(value as string);
     }
   };
   switch (type) {
-    case 'select': {
+    case FieldType.Select: {
       const valueArray = Array.isArray(value) ? value : [value];
       const stringValue = (valueArray as (string | number)[])
         .reduce((result: (string | number)[], item: string | number) => {
@@ -47,8 +47,8 @@ const TableCellField = <T extends AnyObjectWithId>({
         .join(' , ');
       return <StTableCell onClick={onCellClick}>{stringValue}</StTableCell>;
     }
-    case 'image': {
-      return <TableCell>{value && <StPreviewImg onClick={onHandleImageClick} />}</TableCell>;
+    case FieldType.Image: {
+      return <TableCell>{value ? <StPreviewImg onClick={onHandleImageClick} /> : <></>}</TableCell>;
     }
     default:
       return <StTableCell onClick={onCellClick}>{value as string}</StTableCell>;

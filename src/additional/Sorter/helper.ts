@@ -1,11 +1,11 @@
-import { AnyObjectWithId, OptionI } from '../index';
+import { AnyObject, OptionI } from '../index';
 
 function getOptionValueById(options: OptionI[], id: string | number): string | number {
   const option = options.find((item) => item.id === (id || ''));
   return (option && option.value) || '';
 }
 
-export const sortableFn = <T extends AnyObjectWithId>(
+export const sortableFn = <T extends AnyObject>(
   a: T,
   b: T,
   orderBy: keyof T,

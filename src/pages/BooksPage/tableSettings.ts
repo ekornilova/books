@@ -1,7 +1,7 @@
 import { sortableFn } from '../../additional/Sorter/helper';
 import { BookI } from '../../utils/book';
 import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
-import { Alignment, Order, FieldI, OptionI } from '../../additional';
+import { Alignment, Order, FieldI, OptionI, FieldType } from '../../additional';
 import { onlyNumberField, isNotNumberValid, isNotEmptyValid } from './helpers';
 
 export const defaultBook = {
@@ -76,7 +76,11 @@ export const headerSettings = [
     align: 'left' as Alignment,
   },
 ];
-export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI<BookI>[] => {
+export const getFieldSettings = (
+  dictionaries: DictionaryOptionI | null,
+): FieldI<
+  Pick<BookI, 'name' | 'description' | 'author' | 'genres' | 'isbn' | 'commonCount' | 'coverImage'>
+>[] => {
   return [
     {
       name: 'name',
@@ -86,13 +90,13 @@ export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI
       name: 'description',
     },
     {
-      type: 'select',
+      type: FieldType.Select,
       name: 'author',
       options: dictionaries ? dictionaries.authors : [],
       isNotValid: isNotEmptyValid,
     },
     {
-      type: 'select',
+      type: FieldType.Select,
       name: 'genres',
       options: dictionaries ? dictionaries.genres : [],
       isNotValid: isNotEmptyValid,
@@ -108,7 +112,7 @@ export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI
     {
       name: 'coverImage',
       isNotEdit: true,
-      type: 'image',
+      type: FieldType.Image,
     },
   ];
 };
@@ -119,10 +123,10 @@ export interface DictionaryOptionI {
 }
 export const getFieldSettingsInnerTable = (
   dictionaries: DictionaryOptionI | null,
-): FieldI<QuantityShopInfoI>[] => {
+): FieldI<Pick<QuantityShopInfoI, 'shopId' | 'rests'>>[] => {
   return [
     {
-      type: 'select',
+      type: FieldType.Select,
       name: 'shopId',
       options: dictionaries ? dictionaries.shops : [],
       isNotValid: isNotEmptyValid,

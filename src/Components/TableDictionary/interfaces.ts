@@ -1,12 +1,12 @@
 import { ReactElement } from 'react';
-import { Alignment, AnyObjectWithId, FieldI } from '../../additional';
+import { Alignment, AnyObject, FieldI } from '../../additional';
 import { DataH, SortEl } from '../../additional/Sorter/interfaces';
 
 export interface TableHeadData<K> extends DataH<K> {
   align: Alignment;
 }
 
-export interface RowTableProps<T extends AnyObjectWithId> {
+export interface RowTableProps<T extends AnyObject> {
   isEdit?: boolean;
   item: T;
   fieldSettings: FieldI<T>[];
@@ -27,7 +27,7 @@ export interface RowTableProps<T extends AnyObjectWithId> {
   onChangeEdit: any;
   onImageClick?: (src: string) => void;
 }
-export interface TableDictionaryProps<T extends AnyObjectWithId> {
+export interface TableDictionaryProps<T extends AnyObject> {
   bodyList: T[];
   fieldSettings: FieldI<T>[];
   onEditRow?: (row: T) => void;

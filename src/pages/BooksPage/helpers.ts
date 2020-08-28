@@ -49,7 +49,7 @@ export const getDictionaryOptions = (
       }
     : dictionaries;
 };
-export const onlyNumberField = (val: string | number) => {
+export const onlyNumberField = (val: string | number | undefined = ''): number | string => {
   const valReplace = (val as string).replace(/[\D]*/g, '');
   const valNumber = Number(valReplace);
   return Number.isNaN(valNumber) ? valReplace : valNumber;
@@ -77,11 +77,11 @@ export const getFilteredBooks = (books: BookI[], filterValues: FilterSettingsI):
   }
   return books;
 };
-export const isNotNumberValid = (value: number | string) => {
+export const isNotNumberValid = (value: number | string): string => {
   return value > 0 ? '' : 'Count should be more than zero!';
 };
 const SHOULD_FILLED = 'Field should be filled!';
-export const isNotEmptyValid = (value: number | string | (number | string)[]) => {
+export const isNotEmptyValid = (value: number | string | (number | string)[]): string => {
   const checkValue = Array.isArray(value) ? value.length : value;
   return checkValue ? '' : SHOULD_FILLED;
 };
