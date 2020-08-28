@@ -339,7 +339,7 @@ const TableDictionary = <T extends AnyObjectWithId>({
                 </StyledTableRow>
               </TableHead>
               <TableBody>
-                {stableSort(currentList, sortables).map((column) => {
+                {stableSort(currentList, sortables, fieldSettings).map((column) => {
                   let item: T = column;
                   const isEditField = isEdited(edited, column);
                   if (edited && column.id === edited.id) {

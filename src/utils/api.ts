@@ -1,8 +1,9 @@
+const PROPABILITY_VALUE = 0.95;
 export const getPromise = <T>(mockData: T): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
     setTimeout(() => {
       const randomValue = Math.random();
-      if (randomValue < 0.95) {
+      if (randomValue < PROPABILITY_VALUE) {
         resolve(mockData);
       } else {
         const error = new Error('error in server');

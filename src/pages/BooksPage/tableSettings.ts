@@ -19,22 +19,22 @@ export const defaultQuantityShopInfo: QuantityShopInfoI = {
 };
 export const sortSettings = [
   {
-    order: 'desc' as Order,
+    order: Order.Desc,
     orderBy: 'name',
     sortableFn,
   },
   {
-    order: 'desc' as Order,
+    order: Order.Desc,
     orderBy: 'author',
     sortableFn,
   },
   {
-    order: 'desc' as Order,
+    order: Order.Desc,
     orderBy: 'isbn',
     sortableFn,
   },
   {
-    order: 'desc' as Order,
+    order: Order.Desc,
     orderBy: 'commonCount',
     sortableFn,
   },
@@ -76,7 +76,6 @@ export const headerSettings = [
     align: 'left' as Alignment,
   },
 ];
-
 export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI<BookI>[] => {
   return [
     {

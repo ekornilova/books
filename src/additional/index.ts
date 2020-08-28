@@ -10,10 +10,13 @@ export function toggleIcons(icons: JSX.Element[], toggler: boolean): JSX.Element
 
 export type Alignment = 'left' | 'right' | 'center' | 'justify' | 'inherit';
 
-export type Order = 'desc' | 'asc';
-
+// export type Order = 'desc' | 'asc';
+export enum Order {
+  Desc = 'desc',
+  Asc = 'asc',
+}
 export const toggleOrder = (order: Order): Order => {
-  return order === 'desc' ? 'asc' : 'desc';
+  return order === Order.Desc ? Order.Asc : Order.Desc;
 };
 
 export type AnyObjectWithId = {
