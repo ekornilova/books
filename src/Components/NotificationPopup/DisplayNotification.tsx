@@ -7,6 +7,7 @@ import {
   NotificationI,
   NotificationContentI,
   DialogueContentI,
+  NotificationType,
 } from './ProviderNotification';
 import { TextComponent, Button } from '../BasicElements';
 import { StyledDialogActions } from '../StyledMuiComponents/StyledDialogActions';
@@ -169,11 +170,11 @@ const ErrorNotificationView: FC<{
   );
 };
 
-const getNotificationComponent = (componentName: string) => {
+const getNotificationComponent = (componentName: NotificationType) => {
   switch (componentName) {
-    case 'error':
+    case NotificationType.Error:
       return ErrorNotificationView;
-    case 'dialogue':
+    case NotificationType.Dialogue:
       return ConfirmNotificationView;
     default:
       return SuccessNotificationView;

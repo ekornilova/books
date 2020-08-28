@@ -81,7 +81,9 @@ export const isNotNumberValid = (value: number | string): string => {
   return value > 0 ? '' : 'Count should be more than zero!';
 };
 const SHOULD_FILLED = 'Field should be filled!';
-export const isNotEmptyValid = (value: number | string | (number | string)[]): string => {
+export const isNotEmptyValid = (
+  value: number | undefined | string | (number | string)[] = '',
+): string => {
   const checkValue = Array.isArray(value) ? value.length : value;
   return checkValue ? '' : SHOULD_FILLED;
 };

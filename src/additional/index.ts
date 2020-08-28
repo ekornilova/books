@@ -8,8 +8,14 @@ export function toggleIcons(icons: JSX.Element[], toggler: boolean): JSX.Element
   return toggler ? icons[0] : icons[1];
 }
 
-export type Alignment = 'left' | 'right' | 'center' | 'justify' | 'inherit';
-
+//  export type Alignment = 'left' | 'right' | 'center' | 'justify' | 'inherit';
+export enum Alignment {
+  Left = 'left',
+  Right = 'right',
+  Center = 'center',
+  Justify = 'justify',
+  Inherit = 'inherit',
+}
 export enum Order {
   Desc = 'desc',
   Asc = 'asc',
@@ -18,10 +24,6 @@ export const toggleOrder = (order: Order): Order => {
   return order === Order.Desc ? Order.Asc : Order.Desc;
 };
 
-export type AnyObjectWithId = {
-  id?: string | number;
-  [key: string]: any;
-};
 export type AnyObject = Record<string, string | number | (string | number)[] | undefined>;
 
 export enum FieldType {

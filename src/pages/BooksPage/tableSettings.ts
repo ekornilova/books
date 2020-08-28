@@ -43,37 +43,37 @@ export const headerSettings = [
   {
     field: 'Book Name',
     id: 'name',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Description',
     id: 'description',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Author Name',
     id: 'author',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Genres',
     id: 'genres',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'ISBN',
     id: 'isbn',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Total quantity on all stores',
     id: 'commonCount',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Cover Image',
     id: 'coverImage',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
 ];
 export const getFieldSettings = (
@@ -142,12 +142,12 @@ export const headerSettingsInnerTable = [
   {
     field: 'Shop Name',
     id: 'shopId',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Count',
     id: 'rests',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
 ];
 export const sortSettingsInnerTable = [];
