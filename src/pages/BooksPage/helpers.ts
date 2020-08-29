@@ -50,7 +50,7 @@ export const getDictionaryOptions = (
       }
     : dictionaries;
 };
-export const onlyNumberField = (val: string | number | undefined = ''): number | string => {
+export const onlyNumberField = (val: SimpleType | undefined = ''): SimpleType => {
   const valReplace = (val as string).replace(/[\D]*/g, '');
   const valNumber = Number(valReplace);
   return Number.isNaN(valNumber) ? valReplace : valNumber;
@@ -63,13 +63,13 @@ export const getFilteredBooks = <T extends AnyObject>(
   if (filterValuesArr.length) {
     return books.filter((book) => {
       return filterValuesArr.every(([key, filterVal]) => {
-        let bookFieldValue: string | number | (string | number)[] | undefined = '';
+        let bookFieldValue: RecordType = '';
         if (key.includes('_')) {
           const [keyValue, boundary] = key.split('_');
           bookFieldValue = book[keyValue as keyof typeof book] || 0;
           return boundary === 'from'
-            ? (bookFieldValue as number) >= (filterVal as number | string)
-            : (bookFieldValue as number) <= (filterVal as number | string);
+            ? (bookFieldValue as number) >= (filterVal as SimpleType)
+            : (bookFieldValue as number) <= (filterVal as SimpleType);
         }
         bookFieldValue = book[key as keyof typeof book];
         if (Array.isArray(bookFieldValue)) {

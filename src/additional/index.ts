@@ -33,16 +33,16 @@ export enum FieldType {
   Image,
 }
 export interface OptionI {
-  id: string | number;
-  value?: string | number;
+  id: SimpleType;
+  value?: SimpleType;
 }
 export interface FieldI<T extends AnyObject> {
   type?: FieldType;
   options?: OptionI[];
-  defaultValue?: string | number;
+  defaultValue?: SimpleType;
   name: keyof T;
   label?: string;
   isNotValid?: (val: T[keyof T]) => string;
-  onChangeValue?: (val: T[keyof T]) => string | number;
+  onChangeValue?: (val: T[keyof T]) => SimpleType;
   isNotEdit?: boolean;
 }
