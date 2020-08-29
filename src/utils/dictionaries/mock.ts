@@ -1,5 +1,6 @@
 import { AuthorI, GenreI, ShopI, QuantityShopInfoI } from './interface';
 import { BookI } from '../book';
+import { SimpleType } from '../../additional';
 
 export const authorsMock: AuthorI[] = [
   {
@@ -134,7 +135,7 @@ export const genresMock: GenreI[] = [
     name: 'Poem',
   },
 ];
-const getQuantityShopInfo = (bookId: number | string): QuantityShopInfoI[] => [
+const getQuantityShopInfo = (bookId: SimpleType): QuantityShopInfoI[] => [
   {
     bookId,
     shopId: 1,

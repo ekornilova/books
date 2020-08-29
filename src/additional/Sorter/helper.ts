@@ -1,6 +1,6 @@
-import { AnyObject, OptionI } from '../index';
+import { AnyObject, OptionI, SimpleType } from '../index';
 
-function getOptionValueById(options: OptionI[], id: string | number): string | number {
+function getOptionValueById(options: OptionI[], id: SimpleType): SimpleType {
   const option = options.find((item) => item.id === (id || ''));
   return (option && option.value) || '';
 }
@@ -11,11 +11,11 @@ export const sortableFn = <T extends AnyObject>(
   orderBy: keyof T,
   options?: OptionI[],
 ): {
-  a: string | number;
-  b: string | number;
+  a: SimpleType;
+  b: SimpleType;
 } => {
-  let aField = a[orderBy] as string | number;
-  let bField = b[orderBy] as string | number;
+  let aField = a[orderBy] as SimpleType;
+  let bField = b[orderBy] as SimpleType;
   if (options) {
     aField = getOptionValueById(options, aField);
     bField = getOptionValueById(options, bField);

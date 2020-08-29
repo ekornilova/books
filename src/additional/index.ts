@@ -23,8 +23,9 @@ export enum Order {
 export const toggleOrder = (order: Order): Order => {
   return order === Order.Desc ? Order.Asc : Order.Desc;
 };
-
-export type AnyObject = Record<string, string | number | (string | number)[] | undefined>;
+export type SimpleType = string | number;
+export type RecordType = SimpleType | SimpleType[] | undefined;
+export type AnyObject = Record<string, RecordType> | Record<string, SimpleType | undefined>;
 
 export enum FieldType {
   Input,
@@ -32,16 +33,16 @@ export enum FieldType {
   Image,
 }
 export interface OptionI {
-  id: string | number;
-  value?: string | number;
+  id: SimpleType;
+  value?: SimpleType;
 }
 export interface FieldI<T extends AnyObject> {
   type?: FieldType;
   options?: OptionI[];
-  defaultValue?: string | number;
+  defaultValue?: SimpleType;
   name: keyof T;
   label?: string;
   isNotValid?: (val: T[keyof T]) => string;
-  onChangeValue?: (val: T[keyof T]) => string | number;
+  onChangeValue?: (val: T[keyof T]) => SimpleType;
   isNotEdit?: boolean;
 }

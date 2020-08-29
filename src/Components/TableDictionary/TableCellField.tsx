@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { TableCell } from '@material-ui/core';
 import { RemoveRedEyeRounded } from '@material-ui/icons';
-import { AnyObject, FieldI, FieldType } from '../../additional';
+import { AnyObject, FieldI, FieldType, RecordType, SimpleType } from '../../additional';
 
 const StPreviewImg = styled(RemoveRedEyeRounded)`
   cursor: pointer;
@@ -16,7 +16,7 @@ const StTableCell = styled(TableCell)<{ onClick?: any }>`
   ${({ onClick }) => onClick && 'cursor: pointer;'}
 `;
 interface TableCellFieldI<T extends AnyObject> extends FieldI<T> {
-  value: string | number | undefined | (string | number)[];
+  value: RecordType;
 }
 const TableCellField = <T extends AnyObject>({
   type = FieldType.Input,
@@ -36,8 +36,8 @@ const TableCellField = <T extends AnyObject>({
   switch (type) {
     case FieldType.Select: {
       const valueArray = Array.isArray(value) ? value : [value];
-      const stringValue = (valueArray as (string | number)[])
-        .reduce((result: (string | number)[], item: string | number) => {
+      const stringValue = (valueArray as SimpleType[])
+        .reduce((result: SimpleType[], item: SimpleType) => {
           const option = options.find((optionValue) => optionValue.id === item);
           if (option) {
             result.push(option.value || option.id);

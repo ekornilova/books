@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Form from '../../Components/Form';
 import { DictionaryOptionI } from './tableSettings';
-import { FieldI, FieldType, AnyObject } from '../../additional';
+import { FieldI, FieldType, AnyObject, SimpleType } from '../../additional';
 import { onlyNumberField } from './helpers';
 import { Button } from '../../Components/BasicElements';
 
@@ -56,8 +56,8 @@ export const getFilterFieldSettings = (
 };
 export interface FilterSettingsI {
   name: string;
-  author?: string | number;
-  genres?: string | number;
+  author?: SimpleType;
+  genres?: SimpleType;
   isbn: string;
   commonCount_from?: number;
   commonCount_to?: number;
