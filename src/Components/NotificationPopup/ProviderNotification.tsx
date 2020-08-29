@@ -2,8 +2,12 @@ import React, { createContext, useReducer, useContext } from 'react';
 import shortid from 'shortid';
 import update from 'immutability-helper';
 
-export type NotificationType = 'error' | 'success' | 'dialogue';
-
+export enum NotificationType {
+  Error,
+  Success,
+  Dialogue,
+}
+// export type NotificationType = 'error' | 'success' | 'dialogue';
 export interface BaseDialogueI {
   onReject?(): void;
   modalText?: string;
@@ -101,19 +105,19 @@ export const NotificationsProvider = ({ children }: any) => {
       }
     }
 
-    dispatch({ type: 'create', data: { content: { message }, type: 'error' as NotificationType } });
+    dispatch({ type: 'create', data: { content: { message }, type: NotificationType.Error } });
   };
 
   const handleAxiosSuccess = (message: string, title?: string) => {
     dispatch({
       type: 'create',
-      data: { content: { message, title }, type: 'success' as NotificationType },
+      data: { content: { message, title }, type: NotificationType.Success },
     });
   };
   const showDialogue = (dialogueContent: DialogueContentI) => {
     dispatch({
       type: 'create',
-      data: { content: dialogueContent, type: 'dialogue' },
+      data: { content: dialogueContent, type: NotificationType.Dialogue },
     });
   };
   return (

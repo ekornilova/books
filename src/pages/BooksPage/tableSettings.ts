@@ -1,7 +1,7 @@
 import { sortableFn } from '../../additional/Sorter/helper';
 import { BookI } from '../../utils/book';
 import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
-import { Alignment, Order, FieldI, OptionI } from '../../additional';
+import { Alignment, Order, FieldI, OptionI, FieldType } from '../../additional';
 import { onlyNumberField, isNotNumberValid, isNotEmptyValid } from './helpers';
 
 export const defaultBook = {
@@ -19,22 +19,22 @@ export const defaultQuantityShopInfo: QuantityShopInfoI = {
 };
 export const sortSettings = [
   {
-    order: 'desc' as Order,
+    order: Order.Desc,
     orderBy: 'name',
     sortableFn,
   },
   {
-    order: 'desc' as Order,
+    order: Order.Desc,
     orderBy: 'author',
     sortableFn,
   },
   {
-    order: 'desc' as Order,
+    order: Order.Desc,
     orderBy: 'isbn',
     sortableFn,
   },
   {
-    order: 'desc' as Order,
+    order: Order.Desc,
     orderBy: 'commonCount',
     sortableFn,
   },
@@ -43,41 +43,44 @@ export const headerSettings = [
   {
     field: 'Book Name',
     id: 'name',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Description',
     id: 'description',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Author Name',
     id: 'author',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Genres',
     id: 'genres',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'ISBN',
     id: 'isbn',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Total quantity on all stores',
     id: 'commonCount',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Cover Image',
     id: 'coverImage',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
 ];
-
-export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI<BookI>[] => {
+export const getFieldSettings = (
+  dictionaries: DictionaryOptionI | null,
+): FieldI<
+  Pick<BookI, 'name' | 'description' | 'author' | 'genres' | 'isbn' | 'commonCount' | 'coverImage'>
+>[] => {
   return [
     {
       name: 'name',
@@ -87,13 +90,13 @@ export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI
       name: 'description',
     },
     {
-      type: 'select',
+      type: FieldType.Select,
       name: 'author',
       options: dictionaries ? dictionaries.authors : [],
       isNotValid: isNotEmptyValid,
     },
     {
-      type: 'select',
+      type: FieldType.Select,
       name: 'genres',
       options: dictionaries ? dictionaries.genres : [],
       isNotValid: isNotEmptyValid,
@@ -109,7 +112,7 @@ export const getFieldSettings = (dictionaries: DictionaryOptionI | null): FieldI
     {
       name: 'coverImage',
       isNotEdit: true,
-      type: 'image',
+      type: FieldType.Image,
     },
   ];
 };
@@ -120,10 +123,10 @@ export interface DictionaryOptionI {
 }
 export const getFieldSettingsInnerTable = (
   dictionaries: DictionaryOptionI | null,
-): FieldI<QuantityShopInfoI>[] => {
+): FieldI<Pick<QuantityShopInfoI, 'shopId' | 'rests'>>[] => {
   return [
     {
-      type: 'select',
+      type: FieldType.Select,
       name: 'shopId',
       options: dictionaries ? dictionaries.shops : [],
       isNotValid: isNotEmptyValid,
@@ -139,12 +142,12 @@ export const headerSettingsInnerTable = [
   {
     field: 'Shop Name',
     id: 'shopId',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
   {
     field: 'Count',
     id: 'rests',
-    align: 'left' as Alignment,
+    align: Alignment.Left,
   },
 ];
 export const sortSettingsInnerTable = [];

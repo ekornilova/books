@@ -8,30 +8,41 @@ export function toggleIcons(icons: JSX.Element[], toggler: boolean): JSX.Element
   return toggler ? icons[0] : icons[1];
 }
 
-export type Alignment = 'left' | 'right' | 'center' | 'justify' | 'inherit';
-
-export type Order = 'desc' | 'asc';
-
-export const toggleOrder = (order: Order): Order => {
-  return order === 'desc' ? 'asc' : 'desc';
-};
-
-export type AnyObjectWithId = {
-  id?: string | number;
-  [key: string]: any;
-};
-export type FieldType = 'input' | 'select' | 'image';
-export interface OptionI {
-  id: string | number;
-  value?: string | number;
+//  export type Alignment = 'left' | 'right' | 'center' | 'justify' | 'inherit';
+export enum Alignment {
+  Left = 'left',
+  Right = 'right',
+  Center = 'center',
+  Justify = 'justify',
+  Inherit = 'inherit',
 }
-export interface FieldI<T extends AnyObjectWithId> {
+export enum Order {
+  Desc = 'desc',
+  Asc = 'asc',
+}
+export const toggleOrder = (order: Order): Order => {
+  return order === Order.Desc ? Order.Asc : Order.Desc;
+};
+export type SimpleType = string | number;
+export type RecordType = SimpleType | SimpleType[] | undefined;
+export type AnyObject = Record<string, RecordType> | Record<string, SimpleType | undefined>;
+
+export enum FieldType {
+  Input,
+  Select,
+  Image,
+}
+export interface OptionI {
+  id: SimpleType;
+  value?: SimpleType;
+}
+export interface FieldI<T extends AnyObject> {
   type?: FieldType;
   options?: OptionI[];
-  defaultValue?: string | number;
+  defaultValue?: SimpleType;
   name: keyof T;
   label?: string;
-  isNotValid?: (val: string | number) => string;
-  onChangeValue?: (val: string | number) => string | number;
+  isNotValid?: (val: T[keyof T]) => string;
+  onChangeValue?: (val: T[keyof T]) => SimpleType;
   isNotEdit?: boolean;
 }

@@ -5,13 +5,14 @@ import {
   mockUpdateApiRequest,
 } from './api';
 import { QuantityShopInfoI } from './dictionaries/interface';
+import { SimpleType } from '../additional';
 
 export interface BookI {
-  id?: string | number;
+  id?: SimpleType;
   name: string;
   description?: string;
-  author: string | number;
-  genres: (string | number)[];
+  author: SimpleType;
+  genres: SimpleType[];
   isbn?: string;
   coverImage?: string;
   quantityShopInfo: QuantityShopInfoI[];

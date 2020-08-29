@@ -1,8 +1,8 @@
-import { Order } from '../index';
+import { Order, OptionI } from '../index';
 
 // Интерфейс функции компаратора для сортировки конкретного поля
 export interface SortHandler<K> {
-  sortableFn(a: K, b: K, orderBy: keyof K): { a: number; b: number };
+  sortableFn(a: K, b: K, orderBy: keyof K, options?: OptionI[]): { a: number; b: number };
 }
 
 // Интерфейс элемента сортировки
@@ -16,6 +16,7 @@ export interface Desc<T> extends SortHandler<T> {
   a: T;
   b: T;
   orderBy: keyof T;
+  options?: OptionI[];
 }
 
 // Интерфейс для полей шапки таблицы; id - поле из сортируемых данных

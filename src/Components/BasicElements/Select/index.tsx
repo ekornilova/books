@@ -1,18 +1,18 @@
 import React, { ComponentType } from 'react';
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
 import Select from './Select';
-import { OptionI } from '../../../additional';
+import { OptionI, SimpleType } from '../../../additional';
 import FormElWraper from '../FormElWraper';
 
 const SelectFullComponent: React.FC<{
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  value: string | number | null;
+  value: SimpleType | null;
   values: OptionI[];
   className?: string;
   labelText?: string;
   forForm?: boolean;
   variant?: 'filled' | 'outlined' | 'standard' | undefined;
-  getAdditionalComps?: (itemValue: string | number) => React.ReactNode;
+  getAdditionalComps?: (itemValue: SimpleType) => React.ReactNode;
   Icon?: ComponentType<SvgIconProps>;
   open?: boolean;
   isMultiple?: boolean;

@@ -20,7 +20,7 @@ import {
 import styled from 'styled-components';
 import { TableRowProps } from '@material-ui/core/TableRow';
 import { handleSort, showSortable, stableSort } from '../../additional/Sorter';
-import { AnyObjectWithId } from '../../additional';
+import { AnyObject } from '../../additional';
 import { TableDictionaryProps, RowTableProps } from './interfaces';
 import TableCellField from './TableCellField';
 import { SortEl } from '../../additional/Sorter/interfaces';
@@ -92,10 +92,10 @@ const getList = <T extends unknown>(bodyList: T[]): T[] => {
   return clonedBodyList;
 };
 export const ID_NEW_ITEM = 'new';
-const isEdited = <T extends AnyObjectWithId>(edited: T | null, item: T): boolean => {
+const isEdited = <T extends AnyObject>(edited: T | null, item: T): boolean => {
   return edited !== null && edited.id === item.id;
 };
-const TableRowDictionary = <T extends AnyObjectWithId>({
+const TableRowDictionary = <T extends AnyObject>({
   isCollapsed,
   isEdit,
   getCollapseElement,
@@ -188,7 +188,7 @@ const TableRowDictionary = <T extends AnyObjectWithId>({
     </>
   );
 };
-const TableDictionary = <T extends AnyObjectWithId>({
+const TableDictionary = <T extends AnyObject>({
   headList,
   bodyList,
   onEditRow,
@@ -204,7 +204,7 @@ const TableDictionary = <T extends AnyObjectWithId>({
   className,
   height = 50,
   isInner,
-}: TableDictionaryProps<T>) => {
+}: TableDictionaryProps<T>): React.ReactElement => {
   const scrollRef = useRef(null);
   const { showDialogue } = useNotifications();
   const [sortables, setSortables] = React.useState<SortEl<T>[]>(sortList);
@@ -339,7 +339,7 @@ const TableDictionary = <T extends AnyObjectWithId>({
                 </StyledTableRow>
               </TableHead>
               <TableBody>
-                {stableSort(currentList, sortables).map((column) => {
+                {stableSort(currentList, sortables, fieldSettings).map((column) => {
                   let item: T = column;
                   const isEditField = isEdited(edited, column);
                   if (edited && column.id === edited.id) {

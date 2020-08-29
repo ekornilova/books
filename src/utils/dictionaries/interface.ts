@@ -1,18 +1,20 @@
+import { SimpleType } from '../../additional';
+
 export interface ShopI {
-  id: string | number;
+  id: SimpleType;
   name: string;
   address?: string;
 }
 
 export interface QuantityShopInfoI {
-  id?: string | number;
-  shopId: string | number;
-  bookId: string | number;
+  id?: SimpleType;
+  shopId: SimpleType;
+  bookId: SimpleType;
   rests: number;
 }
 
 export interface AuthorI {
-  id: string | number;
+  id: SimpleType;
   firstName: string;
   lastName: string;
 }
@@ -25,6 +27,6 @@ export interface AddressI {
   zipCode: string;
 }
 export interface GenreI {
-  id: string | number;
+  id: SimpleType;
   name: string;
 }

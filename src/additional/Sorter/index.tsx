@@ -1,6 +1,6 @@
 import React from 'react';
 import { TableSortLabel } from '@material-ui/core';
-import { arrayMoveEnd, toggleOrder } from '../index';
+import { arrayMoveEnd, toggleOrder, Order, FieldI } from '../index';
 import { Desc, ShowSortable, SortEl } from './interfaces';
 
 // Вовзращает новый массив сортировок
@@ -23,9 +23,9 @@ function handleSort<T>(sortable: SortEl<T>, sortables: SortEl<T>[]): SortEl<T>[]
 }
 
 // Функция компаратор, возвращающая числовые значения
-function desc<T>({ a, b, orderBy, sortableFn }: Desc<T>): number {
+function desc<T>({ a, b, orderBy, sortableFn, options }: Desc<T>): number {
   // Получаем a и b элементы из сортируемого списка данных
-  const { a: aData, b: bData } = sortableFn(a, b, orderBy);
+  const { a: aData, b: bData } = sortableFn(a, b, orderBy, options);
 
   // Сравнения
   if (aData > bData) {
@@ -40,19 +40,30 @@ function desc<T>({ a, b, orderBy, sortableFn }: Desc<T>): number {
 // Возвращает необходимую функцию для передачи
 // в коллбек метода сортировки массивов (Array.prototype.sort)
 // return (a, b) => number; ([].sort(getSort(props)))
-function getSort<T>({ order, orderBy, sortableFn }: SortEl<T>): (a: T, b: T) => number {
-  return order === 'desc'
-    ? (a: T, b: T) => desc({ a, b, orderBy, sortableFn })
-    : (a: T, b: T) => -desc({ a, b, orderBy, sortableFn });
+function getSort<T>(
+  { order, orderBy, sortableFn }: SortEl<T>,
+  fieldSetting?: FieldI<T>,
+): (a: T, b: T) => number {
+  return (a: T, b: T) => {
+    const orderValue = order === Order.Desc ? 1 : -1;
+    return (
+      orderValue *
+      desc({ a, b, orderBy, sortableFn, options: fieldSetting && fieldSetting.options })
+    );
+  };
+  // order === Order.Desc
+  //   ? (a: T, b: T) => desc({ a, b, orderBy, sortableFn })
+  //   : (a: T, b: T) => -desc({ a, b, orderBy, sortableFn });
 }
 
 // Возвращает список данных таблицы, который сортируем (в TableBody)
-function stableSort<T>(list: T[], sortables: SortEl<T>[]): T[] {
+function stableSort<T>(list: T[], sortables: SortEl<T>[], fieldSettings: FieldI<T>[]): T[] {
   const clonedList = [...list];
-
   // Пройдемся по каждой сортировке и отсортируем по ней список
-  sortables.forEach((sortable) => clonedList.sort(getSort(sortable)));
-
+  sortables.forEach((sortable) => {
+    const fieldSetting = (fieldSettings || []).find((item) => item.name === sortable.orderBy);
+    return clonedList.sort(getSort(sortable, fieldSetting));
+  });
   return clonedList;
 }
 
