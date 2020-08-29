@@ -21,11 +21,7 @@ export const mockGetApiRequest = <T>(requestUrl: string, mockData: T): Promise<T
   // });
 };
 
-export const mockPostApiRequest = <T>(
-  requestUrl: string,
-  payload: any,
-  mockData: T,
-): Promise<T> => {
+export const mockPostApiRequest = <T>(requestUrl: string, payload: T, mockData: T): Promise<T> => {
   return new Promise<T>((resolve /* reject */) => {
     setTimeout(() => {
       resolve(mockData);
@@ -35,7 +31,7 @@ export const mockPostApiRequest = <T>(
 
 export const mockUpdateApiRequest = <T>(
   requestUrl: string,
-  payload: any,
+  payload: T,
   mockData: T,
 ): Promise<T> => {
   return new Promise<T>((resolve /* reject */) => {

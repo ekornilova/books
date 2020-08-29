@@ -1,9 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, Dispatch } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import shortId from 'shortid';
 import Box from '@material-ui/core/Box';
 import { StoreI, DictionaryI } from '../../store/types';
+import { ActionI } from '../../store/actions';
 import {
   headerSettings,
   getFieldSettings,
@@ -48,7 +49,7 @@ const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (
   item: BookI,
   isEdit?: boolean,
   edited?: BookI,
-  onChange?: any,
+  onChange?: React.Dispatch<React.SetStateAction<BookI>>,
 ) => {
   const list = ((isEdit ? edited : item) || item).quantityShopInfo.map((info, idx) => {
     return {
@@ -57,30 +58,32 @@ const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (
     };
   });
   const onActionRow = (action: 'delete' | 'edit' | 'add') => (row: QuantityShopInfoI) => {
-    onChange((oldBook: BookI) => {
-      const findIdx = row.id;
-      const newQuantityShopInfo = [...(oldBook.quantityShopInfo || [])];
-      const newRow: QuantityShopInfoI = {
-        bookId: oldBook.id as string,
-        rests: row.rests,
-        shopId: row.shopId,
-      };
-      switch (action) {
-        case 'add':
-          newQuantityShopInfo.push(newRow);
-          break;
-        case 'edit':
-          newQuantityShopInfo.splice(findIdx as number, 1, newRow);
-          break;
-        default:
-          newQuantityShopInfo.splice(findIdx as number, 1);
-          break;
-      }
-      return {
-        ...oldBook,
-        quantityShopInfo: newQuantityShopInfo,
-      };
-    });
+    if (onChange) {
+      onChange((oldBook: BookI) => {
+        const findIdx = row.id;
+        const newQuantityShopInfo = [...(oldBook.quantityShopInfo || [])];
+        const newRow: QuantityShopInfoI = {
+          bookId: oldBook.id as string,
+          rests: row.rests,
+          shopId: row.shopId,
+        };
+        switch (action) {
+          case 'add':
+            newQuantityShopInfo.push(newRow);
+            break;
+          case 'edit':
+            newQuantityShopInfo.splice(findIdx as number, 1, newRow);
+            break;
+          default:
+            newQuantityShopInfo.splice(findIdx as number, 1);
+            break;
+        }
+        return {
+          ...oldBook,
+          quantityShopInfo: newQuantityShopInfo,
+        };
+      });
+    }
   };
   const additionalProps =
     isEdit && edited && edited.id !== ID_NEW_ITEM
@@ -201,7 +204,7 @@ const mapStateToProps = (state: StoreI) => {
     books: state.books,
   };
 };
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch<ActionI>) => {
   return {
     setBooks: (data: BookI[]) =>
       dispatch({

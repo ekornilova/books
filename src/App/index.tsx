@@ -1,4 +1,4 @@
-import React, { FC, Suspense, useEffect } from 'react';
+import React, { FC, Suspense, useEffect, Dispatch } from 'react';
 import { Redirect } from 'react-router';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider, connect } from 'react-redux';
@@ -9,6 +9,7 @@ import { DisplayNotification, NotificationsProvider } from '../Components/Notifi
 import { useNotifications } from '../Components/NotificationPopup/ProviderNotification';
 import { SETDICTIONARIES } from '../store/constants';
 import { DictionaryI } from '../store/types';
+import { SetDictionaries } from '../store/actions';
 import { getDictionaries } from '../utils/dictionaries/index';
 import { genresMock, authorsMock, shopsMock } from '../utils/dictionaries/mock';
 
@@ -17,7 +18,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0px;
   }
 `;
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch<SetDictionaries>) => {
   return {
     loadDictionaries: (data: DictionaryI) => dispatch({ type: SETDICTIONARIES, data }),
   };

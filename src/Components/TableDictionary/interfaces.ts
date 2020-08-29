@@ -19,12 +19,12 @@ export interface RowTableProps<T extends AnyObject> {
     item: T,
     isEdit?: boolean,
     edited?: T | null,
-    onChange?: any,
+    onChange?: React.Dispatch<React.SetStateAction<T>>,
   ) => ReactElement;
   isDisabled?: boolean;
   countColumns: number;
   edit: T | null;
-  onChangeEdit: any;
+  onChangeEdit: React.Dispatch<React.SetStateAction<T>>;
   onImageClick?: (src: string) => void;
 }
 export interface TableDictionaryProps<T extends AnyObject> {

@@ -1,5 +1,5 @@
-export function arrayMoveEnd(array: any[], i: number): void {
-  const el: any = array[i];
+export function arrayMoveEnd<T>(array: T[], i: number): void {
+  const el: T = array[i];
   array.splice(i, 1);
   array.push(el);
 }
@@ -23,8 +23,9 @@ export enum Order {
 export const toggleOrder = (order: Order): Order => {
   return order === Order.Desc ? Order.Asc : Order.Desc;
 };
-
-export type AnyObject = Record<string, string | number | (string | number)[] | undefined>;
+export type SimpleType = string | number;
+export type RecordType = SimpleType | SimpleType[] | undefined;
+export type AnyObject = Record<string, RecordType> | Record<string, SimpleType | undefined>;
 
 export enum FieldType {
   Input,

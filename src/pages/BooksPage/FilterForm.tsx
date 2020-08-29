@@ -54,17 +54,17 @@ export const getFilterFieldSettings = (
     },
   ];
 };
-export interface FilterSettingsI {
+export type FilterSettingsI = {
   name: string;
   author?: string | number;
   genres?: string | number;
   isbn: string;
   commonCount_from?: number;
   commonCount_to?: number;
-}
+};
 interface FilterFormI<T extends AnyObject> {
   value: T;
-  setValue: any;
+  setValue: React.Dispatch<React.SetStateAction<T>>;
   fieldSettings: FieldI<T>[];
 }
 const FilterFormWrapper = styled.div`
@@ -92,11 +92,11 @@ const StForm = styled(Form)`
   }
 `;
 
-const FilterForm = <T extends AnyObject>({
+const FilterForm = ({
   value,
   setValue,
   fieldSettings,
-}: FilterFormI<T>): React.ReactElement => {
+}: FilterFormI<FilterSettingsI>): React.ReactElement => {
   const onClearFilterSettings = () => {
     setValue(defaultFilterSettings);
   };

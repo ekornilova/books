@@ -8,6 +8,7 @@ import {
   NotificationContentI,
   DialogueContentI,
   NotificationType,
+  NotificationContextI,
 } from './ProviderNotification';
 import { TextComponent, Button } from '../BasicElements';
 import { StyledDialogActions } from '../StyledMuiComponents/StyledDialogActions';
@@ -83,7 +84,7 @@ const SuccessNotificationView: FC<{
   notificationData: NotificationI;
   handleClose: (errorId: string) => void;
 }> = ({ notificationData, handleClose }) => {
-  let timer: any;
+  let timer: number;
   useEffect(() => {
     timer = setTimeout(() => {
       handleClose(notificationData.id);
@@ -181,8 +182,8 @@ const getNotificationComponent = (componentName: NotificationType) => {
   }
 };
 
-const DisplayNotification: any = (): any => {
-  const { notifications, dispatch }: any = useContext(NotificationContext);
+const DisplayNotification: React.FunctionComponent = () => {
+  const { notifications, dispatch }: NotificationContextI = useContext(NotificationContext);
 
   const handleClose = (id: string) => {
     dispatch({

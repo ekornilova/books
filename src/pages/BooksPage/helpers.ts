@@ -3,6 +3,7 @@ import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
 import { DictionaryI } from '../../store/types';
 import { DictionaryOptionI } from './tableSettings';
 import { FilterSettingsI } from './FilterForm';
+import { AnyObject, RecordType, SimpleType } from '../../additional';
 
 export const getBooksWithCommonCount = (books: BookI[]): BookI[] => {
   return books.map((book: BookI) => {
@@ -54,36 +55,39 @@ export const onlyNumberField = (val: string | number | undefined = ''): number |
   const valNumber = Number(valReplace);
   return Number.isNaN(valNumber) ? valReplace : valNumber;
 };
-export const getFilteredBooks = (books: BookI[], filterValues: FilterSettingsI): BookI[] => {
+export const getFilteredBooks = <T extends AnyObject>(
+  books: T[],
+  filterValues: FilterSettingsI,
+): T[] => {
   const filterValuesArr = Object.entries(filterValues).filter(([, val]) => val);
   if (filterValuesArr.length) {
     return books.filter((book) => {
       return filterValuesArr.every(([key, filterVal]) => {
-        let bookFieldValue: any = '';
+        let bookFieldValue: string | number | (string | number)[] | undefined = '';
         if (key.includes('_')) {
           const [keyValue, boundary] = key.split('_');
           bookFieldValue = book[keyValue as keyof typeof book] || 0;
-          return boundary === 'from' ? bookFieldValue >= filterVal : bookFieldValue <= filterVal;
+          return boundary === 'from'
+            ? (bookFieldValue as number) >= (filterVal as number | string)
+            : (bookFieldValue as number) <= (filterVal as number | string);
         }
         bookFieldValue = book[key as keyof typeof book];
         if (Array.isArray(bookFieldValue)) {
-          return bookFieldValue.includes(filterVal);
+          return bookFieldValue.includes(filterVal || '');
         }
         return typeof filterVal === 'number'
           ? filterVal === bookFieldValue
-          : bookFieldValue.includes(filterVal);
+          : (bookFieldValue as string).includes(filterVal || '');
       });
     });
   }
   return books;
 };
-export const isNotNumberValid = (value: number | string): string => {
+export const isNotNumberValid = (value: SimpleType): string => {
   return value > 0 ? '' : 'Count should be more than zero!';
 };
 const SHOULD_FILLED = 'Field should be filled!';
-export const isNotEmptyValid = (
-  value: number | undefined | string | (number | string)[] = '',
-): string => {
+export const isNotEmptyValid = (value: RecordType = ''): string => {
   const checkValue = Array.isArray(value) ? value.length : value;
   return checkValue ? '' : SHOULD_FILLED;
 };
