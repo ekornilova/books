@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import React, { createContext, useReducer, useContext, FunctionComponent } from 'react';
 import shortid from 'shortid';
 import update from 'immutability-helper';
 
@@ -89,7 +89,7 @@ export const NotificationContext = createContext<NotificationContextI>({
   showDialogue: () => {},
 });
 
-export const NotificationsProvider: React.FunctionComponent = ({ children }) => {
+export const NotificationsProvider: FunctionComponent = ({ children }) => {
   const initialState = { notifications: [] };
 
   const reducer = (state: StateI, action: ActionI) => {

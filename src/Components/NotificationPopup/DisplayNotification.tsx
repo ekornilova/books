@@ -1,4 +1,4 @@
-import React, { useContext, FC, useEffect } from 'react';
+import React, { useContext, FC, useEffect, FunctionComponent } from 'react';
 import { Close, CheckCircleOutline } from '@material-ui/icons';
 import styled from 'styled-components';
 import { DialogContentText, DialogContent, Dialog, DialogTitle } from '@material-ui/core';
@@ -182,7 +182,7 @@ const getNotificationComponent = (componentName: NotificationType) => {
   }
 };
 
-const DisplayNotification: React.FunctionComponent = () => {
+const DisplayNotification: FunctionComponent = () => {
   const { notifications, dispatch }: NotificationContextI = useContext(NotificationContext);
 
   const handleClose = (id: string) => {

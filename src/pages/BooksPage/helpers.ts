@@ -75,9 +75,10 @@ export const getFilteredBooks = <T extends AnyObject>(
         if (Array.isArray(bookFieldValue)) {
           return bookFieldValue.includes(filterVal || '');
         }
-        return typeof filterVal === 'number'
+        const pattern = new RegExp((filterVal as string) || '', 'i');
+        return typeof filterVal === 'number' && typeof bookFieldValue !== 'string'
           ? filterVal === bookFieldValue
-          : (bookFieldValue as string).includes(filterVal || '');
+          : (bookFieldValue as string).match(pattern);
       });
     });
   }
