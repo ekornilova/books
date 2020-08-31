@@ -26,7 +26,8 @@ import TableCellField from './TableCellField';
 import { SortEl } from '../../additional/Sorter/interfaces';
 import { ScrollBar, Button } from '../BasicElements';
 import { useNotifications } from '../NotificationPopup/ProviderNotification';
-import { EditField } from '../Form';
+// import { EditField } from '../Form';
+import EditField from '../Form/EditField';
 import ModalWindow from '../ModalWindow';
 
 interface StyledTableRowProps extends TableRowProps {
@@ -135,10 +136,15 @@ const TableRowDictionary = <T extends AnyObject>({
           </TableCell>
         )}
         {fieldSettings.map((fieldSetting) => {
+          const editValue = edit ? edit[fieldSetting.name] : undefined;
           return isEdit && !!(handleDeleteRow || handleStartEditRow) ? (
             <TableCell>
               {!fieldSetting.isNotEdit && (
-                <EditField value={edit as T} fieldSetting={fieldSetting} onChange={onChangeEdit} />
+                <EditField
+                  value={editValue as T[keyof T]}
+                  fieldSetting={fieldSetting}
+                  onChange={onChangeEdit}
+                />
               )}
             </TableCell>
           ) : (
