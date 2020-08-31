@@ -41,6 +41,7 @@ const StyledTableDictionary = styled(TableDictionary)<{ isInner?: boolean; heigh
 margin-top: 40px;
 `}
 `;
+
 const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (
   item: BookI,
   isEdit?: boolean,
