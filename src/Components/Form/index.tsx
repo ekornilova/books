@@ -8,12 +8,10 @@ const Wrapper = styled.div``;
 interface FormI<T extends AnyObject> {
   fieldSettings: FieldI<T>[];
   value: T;
-  onChange: any;
+  onChange: React.Dispatch<React.SetStateAction<T>>;
 }
-interface EditFieldI<T extends AnyObject> {
+interface EditFieldI<T extends AnyObject> extends Omit<FormI<T>, 'fieldSettings'> {
   fieldSetting: FieldI<T>;
-  value: T;
-  onChange: any;
 }
 export const StInput = styled((props) => <Input {...props} />)`
   padding-top: 10px;

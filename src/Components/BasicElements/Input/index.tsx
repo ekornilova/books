@@ -21,7 +21,6 @@ export interface InputInterface {
   labelText?: string;
   className?: string;
   forForm?: boolean;
-  [key: string]: any;
 }
 
 const InputComponent: FC<InputInterface & InputProps> = ({

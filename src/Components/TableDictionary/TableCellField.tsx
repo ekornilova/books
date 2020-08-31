@@ -12,7 +12,7 @@ const StPreviewImg = styled(RemoveRedEyeRounded)`
     fill: #eb5757;
   }
 `;
-const StTableCell = styled(TableCell)<{ onClick?: any }>`
+const StTableCell = styled(TableCell)<{ onClick?: () => void }>`
   ${({ onClick }) => onClick && 'cursor: pointer;'}
 `;
 interface TableCellFieldI<T extends AnyObject> extends FieldI<T> {

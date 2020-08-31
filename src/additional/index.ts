@@ -1,5 +1,5 @@
-export function arrayMoveEnd(array: any[], i: number): void {
-  const el: any = array[i];
+export function arrayMoveEnd<T>(array: T[], i: number): void {
+  const el: T = array[i];
   array.splice(i, 1);
   array.push(el);
 }

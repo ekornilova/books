@@ -13,7 +13,7 @@ const TextComponent: FC<{
     | 'textSecondary'
     | 'error'
     | undefined;
-  [key: string]: any;
+  gutterBottom?: boolean;
 }> = ({ text, className, color, ...rest }) => {
   return (
     <Typography className={className} color={color} {...rest}>

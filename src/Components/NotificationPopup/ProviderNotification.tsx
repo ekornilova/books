@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import React, { createContext, useReducer, useContext, FunctionComponent } from 'react';
 import shortid from 'shortid';
 import update from 'immutability-helper';
 
@@ -7,7 +7,47 @@ export enum NotificationType {
   Success,
   Dialogue,
 }
-// export type NotificationType = 'error' | 'success' | 'dialogue';
+// export enum ActionType {
+//   Create,
+//   Delete
+// }
+export type ActionType = 'create' | 'delete';
+
+interface ResponseData {
+  message?: string;
+}
+interface ResponseWithError {
+  response: {
+    status: number;
+    message?: string;
+    data?: ResponseData | string;
+  };
+}
+export type ActionDataSuccessError = {
+  type: NotificationType.Error | NotificationType.Success;
+  content: {
+    message: string;
+    title?: string;
+  };
+};
+export type ActionDataDialogue = {
+  type: NotificationType.Dialogue;
+  content: DialogueContentI;
+};
+export type ActionCreateData = ActionDataSuccessError | ActionDataDialogue;
+export type ActionDeleteData = {
+  id: string;
+};
+export type ActionCreateI = {
+  type: 'create';
+  data: ActionCreateData;
+};
+export type ActionDeleteI = {
+  type: 'delete';
+  data: ActionDeleteData;
+};
+export type ActionI = ActionDeleteI | ActionCreateI;
+export type DispatchI = React.Dispatch<ActionI>;
 export interface BaseDialogueI {
   onReject?(): void;
   modalText?: string;
@@ -26,31 +66,33 @@ export interface NotificationContentI {
 }
 
 export interface NotificationI {
-  content: NotificationContentI;
+  content: NotificationContentI | DialogueContentI;
   type: NotificationType;
   id: string;
 }
-
+export type StateI = {
+  notifications: NotificationI[];
+};
 export interface NotificationContextI {
   notifications: NotificationI[];
-  dispatch: React.Dispatch<{ type: string; data: any }>;
-  handleAxiosError(error: any): any;
-  handleAxiosSuccess(message: string, title?: string): any;
-  showDialogue(dialogueContent: DialogueContentI): any;
+  dispatch: DispatchI;
+  handleAxiosError(error: ResponseWithError): void;
+  handleAxiosSuccess(message: string, title?: string): void;
+  showDialogue(dialogueContent: DialogueContentI): void;
 }
 
 export const NotificationContext = createContext<NotificationContextI>({
   notifications: [],
-  dispatch: (): any => {},
-  handleAxiosError: (): any => {},
-  handleAxiosSuccess: (): any => {},
-  showDialogue: (): any => {},
+  dispatch: () => {},
+  handleAxiosError: () => {},
+  handleAxiosSuccess: () => {},
+  showDialogue: () => {},
 });
 
-export const NotificationsProvider = ({ children }: any) => {
-  const initialState = { errors: [], notifications: [] };
+export const NotificationsProvider: FunctionComponent = ({ children }) => {
+  const initialState = { notifications: [] };
 
-  const reducer = (state: any, action: any) => {
+  const reducer = (state: StateI, action: ActionI) => {
     switch (action.type) {
       case 'create': {
         const newNotification = {
@@ -58,7 +100,6 @@ export const NotificationsProvider = ({ children }: any) => {
           type: action.data.type,
           id: shortid.generate(),
         };
-
         return {
           notifications: [...state.notifications, newNotification],
         };
@@ -76,13 +117,14 @@ export const NotificationsProvider = ({ children }: any) => {
         return state;
       }
       default:
-        throw new Error();
+        return state;
+      // throw new Error();
     }
   };
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch]: [StateI, DispatchI] = useReducer(reducer, initialState);
 
-  const handleAxiosError = ({ response }: any) => {
+  const handleAxiosError = ({ response }: ResponseWithError) => {
     let message = 'Unknown error';
     if (response) {
       switch (true) {
@@ -91,20 +133,19 @@ export const NotificationsProvider = ({ children }: any) => {
           message = 'No access';
           break;
         case typeof response.message === 'string':
-          message = response.message;
+          message = response.message || '';
           break;
-        case Boolean(response.data && response.data.message):
-          message = response.data.message;
+        case Boolean(response.data && (response.data as ResponseData).message):
+          message = (response.data as ResponseData).message || '';
           break;
         case typeof response.data === 'string':
-          message = response.data;
+          message = response.data as string;
           break;
         default:
           message = 'Unknown error';
           break;
       }
     }
-
     dispatch({ type: 'create', data: { content: { message }, type: NotificationType.Error } });
   };
 

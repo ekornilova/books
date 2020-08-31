@@ -4,7 +4,7 @@ import BooksPage from '../pages/BooksPage';
 export interface RouteI {
   name: string;
   path: string;
-  Component: any;
+  Component: React.FC;
   routes?: RouteI[];
   redirect?: string;
   exact?: boolean;
