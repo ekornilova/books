@@ -1,15 +1,11 @@
 import React, { FC, Suspense, useEffect } from 'react';
 import { Redirect } from 'react-router';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-// import { Provider, connect } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
 import { routes as routesConfig } from '../routes';
-// import { store } from '../store';
 import { DisplayNotification } from '../Components/NotificationPopup';
 import ContextProvider, { useStore } from '../contextstore';
-// import { SETDICTIONARIES } from '../store/constants';
-import { DictionaryI } from '../store/types';
-// import { SetDictionaries } from '../store/actions';
+import { DictionaryI } from '../contextstore/dictionaries';
 import { getDictionaries } from '../utils/dictionaries/index';
 import { genresMock, authorsMock, shopsMock } from '../utils/dictionaries/mock';
 

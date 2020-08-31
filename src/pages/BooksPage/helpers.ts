@@ -1,6 +1,6 @@
 import { BookI } from '../../utils/book';
 import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
-import { DictionaryI } from '../../store/types';
+import { DictionaryI } from '../../contextstore/dictionaries';
 import { DictionaryOptionI } from './tableSettings';
 import { FilterSettingsI, RangeType } from './FilterForm';
 import { AnyObject, RecordType, SimpleType } from '../../additional';

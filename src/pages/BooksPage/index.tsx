@@ -1,10 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
-// import { connect } from 'react-redux';
 import styled from 'styled-components';
 import shortId from 'shortid';
 import Box from '@material-ui/core/Box';
-// import { StoreI, DictionaryI } from '../../store/types';
-// import { ActionI } from '../../store/actions';
 import {
   headerSettings,
   getFieldSettings,
@@ -21,7 +18,6 @@ import { TextComponent } from '../../Components/BasicElements';
 import { getBooks, BookI, deleteBook, updateBook, createBook } from '../../utils/book';
 import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
 import { booksMock } from '../../utils/dictionaries/mock';
-// import { SETBOOKS } from '../../store/constants';
 import { useStore } from '../../contextstore';
 import { getBooksWithCommonCount, getDictionaryOptions, getFilteredBooks } from './helpers';
 import FilterForm, {
