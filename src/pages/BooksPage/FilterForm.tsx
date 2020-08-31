@@ -41,8 +41,6 @@ export const getFilterFieldSettings = (
     {
       name: 'commonCount',
       type: FieldType.Custom,
-      // label: 'Min count',
-      // onChangeValue: onlyNumberField,
       fieldSettings: [
         {
           name: 'from',
@@ -56,16 +54,6 @@ export const getFilterFieldSettings = (
         },
       ],
     },
-    // {
-    //   name: 'commonCount_from',
-    //   label: 'Min count',
-    //   onChangeValue: onlyNumberField,
-    // },
-    // {
-    //   name: 'commonCount_to',
-    //   label: 'Max count',
-    //   onChangeValue: onlyNumberField,
-    // },
   ];
 };
 export type RangeType = {
@@ -78,8 +66,6 @@ export type FilterSettingsI = {
   genres?: SimpleType;
   isbn: string;
   commonCount: RangeType;
-  // commonCount_from?: number;
-  // commonCount_to?: number;
 };
 interface FilterFormI<T extends AnyObject> {
   value: T;

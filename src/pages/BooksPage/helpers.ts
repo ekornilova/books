@@ -88,25 +88,8 @@ export const getFilteredBooks = <T extends AnyObject>(
         if (isRangeType(filterVal)) {
           return isInRangeType(filterVal as RangeType, bookFieldValue as number);
         }
-        // if (typeof filterVal === 'object') {
-        //   let condition = true;
-        //   if (filterVal.from) {
-        //     condition = condition && (bookFieldValue || 0) >= filterVal.from;
-        //   }
-        //   if (filterVal.to) {
-        //     condition = condition && (bookFieldValue || 0) <= filterVal.to;
-        //   }
-        //   return condition;
-        // }
-        // if (key.includes('_')) {
-        //   const [keyValue, boundary] = key.split('_');
-        //   bookFieldValue = book[keyValue as keyof typeof book] || 0;
-        //   return boundary === 'from'
-        //     ? (bookFieldValue as number) >= (filterVal as SimpleType)
-        //     : (bookFieldValue as number) <= (filterVal as SimpleType);
-        // }
         if (Array.isArray(bookFieldValue)) {
-          return bookFieldValue.includes(filterVal || '');
+          return bookFieldValue.includes((filterVal as string) || '');
         }
         const pattern = new RegExp((filterVal as string) || '', 'i');
         return typeof filterVal === 'number' && typeof bookFieldValue !== 'string'

@@ -56,26 +56,6 @@ const EditField = <T extends AnyObject>({
         : fieldValue,
     );
   };
-  // const handleChangeValue = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   event.persist();
-  //   const fieldValue = event.target.value;
-  //   setLocalState(fieldSetting.onChangeValue
-  //           ? fieldSetting.onChangeValue(fieldValue as T[keyof T])
-  //           : fieldValue)
-  // onChange((oldVals: T) => {
-  //   const fieldValue =
-  //     typeof oldVals[field] === 'boolean' ? event.target.checked : event.target.value;
-
-  //   const newVals = {
-  //     ...oldVals,
-  //     [field]: fieldSetting.onChangeValue
-  //       ? fieldSetting.onChangeValue(fieldValue as T[keyof T])
-  //       : fieldValue,
-  //   };
-  //   return newVals;
-  // });
-  // };
-  // const currentValue = value[fieldSetting.name];
   const errorMessage = fieldSetting.isNotValid ? fieldSetting.isNotValid(localState) : '';
   let ComponentField = null;
   switch (fieldSetting.type) {
