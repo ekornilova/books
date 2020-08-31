@@ -11,15 +11,11 @@ export const defaultFilterSettings = {
   isbn: '',
   author: '',
   genres: '',
+  commonCount: {},
 };
 export const getFilterFieldSettings = (
   dictionaries: DictionaryOptionI | null,
-): FieldI<
-  Pick<
-    FilterSettingsI,
-    'name' | 'author' | 'genres' | 'isbn' | 'commonCount_from' | 'commonCount_to'
-  >
->[] => {
+): FieldI<Pick<FilterSettingsI, 'name' | 'author' | 'genres' | 'isbn' | 'commonCount'>>[] => {
   return [
     {
       name: 'name',
@@ -43,24 +39,47 @@ export const getFilterFieldSettings = (
       onChangeValue: onlyNumberField,
     },
     {
-      name: 'commonCount_from',
-      label: 'Min count',
-      onChangeValue: onlyNumberField,
+      name: 'commonCount',
+      type: FieldType.Custom,
+      // label: 'Min count',
+      // onChangeValue: onlyNumberField,
+      fieldSettings: [
+        {
+          name: 'from',
+          label: 'Min count',
+          onChangeValue: onlyNumberField,
+        },
+        {
+          name: 'to',
+          label: 'Max count',
+          onChangeValue: onlyNumberField,
+        },
+      ],
     },
-    {
-      name: 'commonCount_to',
-      label: 'Max count',
-      onChangeValue: onlyNumberField,
-    },
+    // {
+    //   name: 'commonCount_from',
+    //   label: 'Min count',
+    //   onChangeValue: onlyNumberField,
+    // },
+    // {
+    //   name: 'commonCount_to',
+    //   label: 'Max count',
+    //   onChangeValue: onlyNumberField,
+    // },
   ];
+};
+export type RangeType = {
+  from?: number;
+  to?: number;
 };
 export type FilterSettingsI = {
   name: string;
   author?: SimpleType;
   genres?: SimpleType;
   isbn: string;
-  commonCount_from?: number;
-  commonCount_to?: number;
+  commonCount: RangeType;
+  // commonCount_from?: number;
+  // commonCount_to?: number;
 };
 interface FilterFormI<T extends AnyObject> {
   value: T;
