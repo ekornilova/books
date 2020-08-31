@@ -2,14 +2,21 @@ import React, { useContext, FC, useEffect, FunctionComponent } from 'react';
 import { Close, CheckCircleOutline } from '@material-ui/icons';
 import styled from 'styled-components';
 import { DialogContentText, DialogContent, Dialog, DialogTitle } from '@material-ui/core';
+// import {
+//   NotificationContext,
+//   NotificationI,
+//   NotificationContentI,
+//   DialogueContentI,
+//   NotificationType,
+//   NotificationContextI,
+// } from './ProviderNotification';
 import {
-  NotificationContext,
   NotificationI,
   NotificationContentI,
   DialogueContentI,
   NotificationType,
-  NotificationContextI,
-} from './ProviderNotification';
+} from '../../contextstore/notifications';
+import { ContextI, Context } from '../../contextstore';
 import { TextComponent, Button } from '../BasicElements';
 import { StyledDialogActions } from '../StyledMuiComponents/StyledDialogActions';
 import ModalConfirmDialogue from '../ModalConfirmDialogue';
@@ -183,7 +190,7 @@ const getNotificationComponent = (componentName: NotificationType) => {
 };
 
 const DisplayNotification: FunctionComponent = () => {
-  const { notifications, dispatch }: NotificationContextI = useContext(NotificationContext);
+  const { notifications, dispatch }: ContextI = useContext(Context);
 
   const handleClose = (id: string) => {
     dispatch({

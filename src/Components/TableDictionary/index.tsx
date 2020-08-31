@@ -25,7 +25,7 @@ import { TableDictionaryProps, RowTableProps } from './interfaces';
 import TableCellField from './TableCellField';
 import { SortEl } from '../../additional/Sorter/interfaces';
 import { ScrollBar, Button } from '../BasicElements';
-import { useNotifications } from '../NotificationPopup/ProviderNotification';
+import { useStore } from '../../contextstore';
 import { EditField } from '../Form';
 import ModalWindow from '../ModalWindow';
 
@@ -206,7 +206,7 @@ const TableDictionary = <T extends AnyObject>({
   isInner,
 }: TableDictionaryProps<T>): React.ReactElement => {
   const scrollRef = useRef(null);
-  const { showDialogue } = useNotifications();
+  const { showDialogue } = useStore();
   const [sortables, setSortables] = React.useState<SortEl<T>[]>(sortList);
   const [edited, setEdited] = React.useState<T | null>(null);
   const [imageSrc, setImageSrc] = React.useState<string>('');

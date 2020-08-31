@@ -1,8 +1,8 @@
 import { BookI } from '../../utils/book';
 import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
-import { DictionaryI } from '../../store/types';
+import { DictionaryI } from '../../contextstore/dictionaries';
 import { DictionaryOptionI } from './tableSettings';
-import { FilterSettingsI } from './FilterForm';
+import { FilterSettingsI, RangeType } from './FilterForm';
 import { AnyObject, RecordType, SimpleType } from '../../additional';
 
 export const getBooksWithCommonCount = (books: BookI[]): BookI[] => {
@@ -55,25 +55,41 @@ export const onlyNumberField = (val: SimpleType | undefined = ''): SimpleType =>
   const valNumber = Number(valReplace);
   return Number.isNaN(valNumber) ? valReplace : valNumber;
 };
+export const isRangeType = (filterVal: FilterSettingsI[keyof FilterSettingsI]): boolean => {
+  if (Array.isArray(filterVal)) {
+    return false;
+  }
+  return (
+    typeof filterVal === 'object' && (filterVal.from !== undefined || filterVal.to !== undefined)
+  );
+};
+export const isInRangeType = (range: RangeType, value: number): boolean => {
+  let condition = true;
+  if (range.from) {
+    condition = condition && (value || 0) >= range.from;
+  }
+  if (range.to) {
+    condition = condition && (value || 0) <= range.to;
+  }
+  return condition;
+};
 export const getFilteredBooks = <T extends AnyObject>(
   books: T[],
   filterValues: FilterSettingsI,
 ): T[] => {
-  const filterValuesArr = Object.entries(filterValues).filter(([, val]) => val);
+  const filterValuesArr = Object.entries(filterValues).filter(
+    ([, val]) => val && (typeof val === 'object' ? !!Object.keys(val).length : true),
+  );
   if (filterValuesArr.length) {
     return books.filter((book) => {
       return filterValuesArr.every(([key, filterVal]) => {
         let bookFieldValue: RecordType = '';
-        if (key.includes('_')) {
-          const [keyValue, boundary] = key.split('_');
-          bookFieldValue = book[keyValue as keyof typeof book] || 0;
-          return boundary === 'from'
-            ? (bookFieldValue as number) >= (filterVal as SimpleType)
-            : (bookFieldValue as number) <= (filterVal as SimpleType);
-        }
         bookFieldValue = book[key as keyof typeof book];
+        if (isRangeType(filterVal)) {
+          return isInRangeType(filterVal as RangeType, bookFieldValue as number);
+        }
         if (Array.isArray(bookFieldValue)) {
-          return bookFieldValue.includes(filterVal || '');
+          return bookFieldValue.includes((filterVal as string) || '');
         }
         const pattern = new RegExp((filterVal as string) || '', 'i');
         return typeof filterVal === 'number' && typeof bookFieldValue !== 'string'

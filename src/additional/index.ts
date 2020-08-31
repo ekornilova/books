@@ -31,6 +31,7 @@ export enum FieldType {
   Input,
   Select,
   Image,
+  Custom,
 }
 export interface OptionI {
   id: SimpleType;
@@ -45,4 +46,5 @@ export interface FieldI<T extends AnyObject> {
   isNotValid?: (val: T[keyof T]) => string;
   onChangeValue?: (val: T[keyof T]) => SimpleType;
   isNotEdit?: boolean;
+  fieldSettings?: FieldI<T>[];
 }

@@ -1,10 +1,7 @@
-import React, { FC, useEffect, useState, Dispatch } from 'react';
-import { connect } from 'react-redux';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import shortId from 'shortid';
 import Box from '@material-ui/core/Box';
-import { StoreI, DictionaryI } from '../../store/types';
-import { ActionI } from '../../store/actions';
 import {
   headerSettings,
   getFieldSettings,
@@ -21,8 +18,7 @@ import { TextComponent } from '../../Components/BasicElements';
 import { getBooks, BookI, deleteBook, updateBook, createBook } from '../../utils/book';
 import { QuantityShopInfoI } from '../../utils/dictionaries/interface';
 import { booksMock } from '../../utils/dictionaries/mock';
-import { SETBOOKS } from '../../store/constants';
-import { useNotifications } from '../../Components/NotificationPopup/ProviderNotification';
+import { useStore } from '../../contextstore';
 import { getBooksWithCommonCount, getDictionaryOptions, getFilteredBooks } from './helpers';
 import FilterForm, {
   defaultFilterSettings,
@@ -45,6 +41,7 @@ const StyledTableDictionary = styled(TableDictionary)<{ isInner?: boolean; heigh
 margin-top: 40px;
 `}
 `;
+
 const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (
   item: BookI,
   isEdit?: boolean,
@@ -110,14 +107,15 @@ const getCollapseElementForTable = (dictionaries: DictionaryOptionI | null) => (
   );
 };
 
-const BooksPage: FC<{
-  dictionaries: DictionaryI | null;
-  books: BookI[];
-  setBooks: (val: BookI[]) => void;
-}> = ({ dictionaries, books, setBooks }) => {
+// <{
+//   dictionaries: DictionaryI | null;
+//   books: BookI[];
+//   setBooks: (val: BookI[]) => void;
+// }>
+const BooksPage: FC = () => {
+  const { handleAxiosError, handleAxiosSuccess, books, dictionaries, setBooks } = useStore();
   const [filterBooks, setFilterBooks] = useState<BookI[]>(books);
   const [filterValues, setFilterValues] = useState<FilterSettingsI>(defaultFilterSettings);
-  const { handleAxiosError, handleAxiosSuccess } = useNotifications();
   const getBooksFromServer = (items?: BookI[]) => {
     getBooks(items || booksMock)
       .then((newBooks: BookI[]) => {
@@ -198,19 +196,20 @@ const BooksPage: FC<{
     </>
   );
 };
-const mapStateToProps = (state: StoreI) => {
-  return {
-    dictionaries: state.dictionaries,
-    books: state.books,
-  };
-};
-const mapDispatchToProps = (dispatch: Dispatch<ActionI>) => {
-  return {
-    setBooks: (data: BookI[]) =>
-      dispatch({
-        type: SETBOOKS,
-        data,
-      }),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(BooksPage);
+// const mapStateToProps = (state: StoreI) => {
+//   return {
+//     dictionaries: state.dictionaries,
+//     books: state.books,
+//   };
+// };
+// const mapDispatchToProps = (dispatch: Dispatch<ActionI>) => {
+//   return {
+//     setBooks: (data: BookI[]) =>
+//       dispatch({
+//         type: SETBOOKS,
+//         data,
+//       }),
+//   };
+// };
+export default BooksPage;
+// connect(mapStateToProps, mapDispatchToProps)(BooksPage);

@@ -1,4 +1,7 @@
 import DisplayNotification from './DisplayNotification';
-import { NotificationsProvider, NotificationContext } from './ProviderNotification';
+// import { NotificationsProvider, NotificationContext } from './ProviderNotification';
 
-export { DisplayNotification, NotificationsProvider, NotificationContext };
+export {
+  DisplayNotification,
+  //  , NotificationsProvider, NotificationContext
+};
