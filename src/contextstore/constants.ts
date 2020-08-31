@@ -1,0 +1,4 @@
+export const SETDICTIONARIES = 'SET_DICTIONARIES';
+export type SETDICTIONARIES = typeof SETDICTIONARIES;
+export const SETBOOKS = 'SET_BOOKS';
+export type SETBOOKS = typeof SETBOOKS;
